@@ -3,6 +3,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from '../config/app-config';
+import { UsersModule } from './users/users.module';
 
 const { host, port, username, password, database } = appConfig.typeorm;
 
@@ -20,6 +21,7 @@ const { host, port, username, password, database } = appConfig.typeorm;
          logging: true,
          synchronize: true,
       }),
+      UsersModule,
    ],
    controllers: [AppController],
    providers: [AppService],
