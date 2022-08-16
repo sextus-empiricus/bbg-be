@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from '../config/app-config';
 import { UsersModule } from './users/users.module';
+import { CronModule } from './cron/cron.module';
 
 const { host, port, username, password, database } = appConfig.typeorm;
 
@@ -22,6 +23,7 @@ const { host, port, username, password, database } = appConfig.typeorm;
          synchronize: true,
       }),
       UsersModule,
+      CronModule,
    ],
    controllers: [AppController],
    providers: [AppService],
