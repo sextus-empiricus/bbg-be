@@ -1,32 +1,79 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { DataSource } from 'typeorm';
+import { DataSource, InsertResult } from 'typeorm';
+import { User } from './entities/user.entity';
+import {
+   CreateUserResponse,
+   DeactivateOneByIdResponse,
+   GetAllUsersResponse,
+   GetOneByIdResponse,
+} from '../types/users/users.responses';
+import { ResponseStatus } from '../types/api/response';
+import { UserMinified } from '../types/users/user';
 
 @Injectable()
 export class UsersService {
-   constructor(
-      @Inject(DataSource) private dataSource: DataSource,
-   ) {
+   constructor(@Inject(DataSource) private dataSource: DataSource) {}
+
+   private outputFilter(users: User[]): UserMinified[] {
+      return users.map((el) => {
+         return {
+            id: el.id,
+            email: el.email,
+            password: el.password,
+            authToken: el.authToken,
+         };
+      });
    }
 
-   create(createUserDto: CreateUserDto) {
-      return 'This action adds a new user';
+   async create(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
+      const insertResult: InsertResult = await this.dataSource
+         .createQueryBuilder()
+         .insert()
+         .into(User)
+         .values(createUserDto)
+         .execute();
+      return {
+         status: ResponseStatus.success,
+         createdUserId: insertResult.identifiers[0].id,
+      };
    }
 
-   // findAll() {
-   //   return `This action returns all users`;
-   // }
-   //
-   // findOne(id: number) {
-   //   return `This action returns a #${id} user`;
-   // }
-   //
-   // update(id: number, updateUserDto: UpdateUserDto) {
-   //   return `This action updates a #${id} user`;
-   // }
-   //
-   // remove(id: number) {
-   //   return `This action removes a #${id} user`;
-   // }
+   async getAll(): Promise<GetAllUsersResponse> {
+      const usersList = await this.dataSource
+         .createQueryBuilder()
+         .select('user')
+         .from(User, 'user')
+         .getMany();
+      return {
+         status: ResponseStatus.success,
+         usersList: this.outputFilter(usersList),
+      };
+   }
+
+   async getOneById(id: string): Promise<GetOneByIdResponse> {
+      const user = await this.dataSource
+         .createQueryBuilder()
+         .select('user')
+         .from(User, 'user')
+         .where({ id })
+         .getOne();
+      return {
+         status: ResponseStatus.success,
+         user: this.outputFilter([user])[0],
+      };
+   }
+
+   async deactivateOneById(id: string): Promise<DeactivateOneByIdResponse> {
+      await this.dataSource
+         .createQueryBuilder()
+         .update(User)
+         .set({ isActive: false })
+         .where({ id })
+         .execute();
+      return {
+         status: ResponseStatus.success,
+         deactivatedUserId: id,
+      };
+   }
 }
