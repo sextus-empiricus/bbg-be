@@ -1,4 +1,13 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+   BaseEntity,
+   Column,
+   CreateDateColumn,
+   Entity,
+   OneToMany,
+   PrimaryGeneratedColumn,
+   UpdateDateColumn,
+} from 'typeorm';
+import { Trade } from '../../trades/entities/trade.entity';
 
 @Entity()
 export class User extends BaseEntity {
@@ -6,10 +15,9 @@ export class User extends BaseEntity {
    id: string;
 
    @Column({
-         unique: true,
-         length: 256,
-      },
-   )
+      unique: true,
+      length: 256,
+   })
    email: string;
 
    @Column({
@@ -34,4 +42,8 @@ export class User extends BaseEntity {
       default: true,
    })
    isActive: boolean;
+
+   /*Relations:*/
+   @OneToMany(() => Trade, (trade) => trade.user)
+   trades: Trade[];
 }

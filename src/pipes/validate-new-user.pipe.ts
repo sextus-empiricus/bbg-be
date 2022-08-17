@@ -11,11 +11,10 @@ import { hash } from 'bcrypt';
 @Injectable()
 export class ValidateNewUserPipe implements PipeTransform {
    async transform(
-      value: CreateUserDto,
+      value: any,
       metadata: ArgumentMetadata,
    ): Promise<CreateUserDto> {
       const targetUser = await User.findOne({ where: { email: value.email } });
-
       if (targetUser) {
          throw new ConflictException('Provided email address is already used.');
       } else {

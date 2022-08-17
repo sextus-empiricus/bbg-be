@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { CreateUserDto } from './dto';
 import { DataSource, InsertResult } from 'typeorm';
 import { User } from './entities/user.entity';
 import {
    CreateUserResponse,
-   DeactivateOneByIdResponse,
+   DeactivateUserByIdResponse,
    GetAllUsersResponse,
-   GetOneByIdResponse,
+   GetUserByIdResponse,
 } from '../types/users/users.responses';
 import { ResponseStatus } from '../types/api/response';
 import { UserMinified } from '../types/users/user';
@@ -51,7 +51,7 @@ export class UsersService {
       };
    }
 
-   async getOneById(id: string): Promise<GetOneByIdResponse> {
+   async getById(id: string): Promise<GetUserByIdResponse> {
       const user = await this.dataSource
          .createQueryBuilder()
          .select('user')
@@ -64,7 +64,7 @@ export class UsersService {
       };
    }
 
-   async deactivateOneById(id: string): Promise<DeactivateOneByIdResponse> {
+   async deactivateById(id: string): Promise<DeactivateUserByIdResponse> {
       await this.dataSource
          .createQueryBuilder()
          .update(User)
