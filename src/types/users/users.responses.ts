@@ -9,10 +9,10 @@ export interface GetAllUsersResponse extends SuccessResponse {
    usersList: UserMinified[];
 }
 
-export interface GetOneByIdResponse extends SuccessResponse {
+export interface GetUserByIdResponse extends SuccessResponse {
    user: UserMinified;
 }
 
-export interface DeactivateOneByIdResponse extends SuccessResponse {
+export interface DeactivateUserByIdResponse extends SuccessResponse {
    deactivatedUserId: string;
 }

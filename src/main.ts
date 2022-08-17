@@ -1,8 +1,8 @@
-import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { GlobalExceptionFilter } from './filters/global-exepction.filter';
+import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { appConfig } from '../config/app-config';
-import { GlobalExceptionFilter } from './filters/global-exepction.filter';
 
 const { port } = appConfig.app;
 

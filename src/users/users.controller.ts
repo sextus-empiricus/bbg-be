@@ -3,9 +3,9 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
    CreateUserResponse,
-   DeactivateOneByIdResponse,
+   DeactivateUserByIdResponse,
    GetAllUsersResponse,
-   GetOneByIdResponse,
+   GetUserByIdResponse,
 } from '../types/users/users.responses';
 import { ValidateNewUserPipe } from '../pipes/validate-new-user.pipe';
 import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
@@ -27,17 +27,14 @@ export class UsersController {
    }
 
    @Get('/:id')
-   getOneById(@Param('id') id: string): Promise<GetOneByIdResponse> {
-      return this.usersService.getOneById(id);
+   getById(@Param('id') id: string): Promise<GetUserByIdResponse> {
+      return this.usersService.getById(id);
    }
 
-   /*
-   This function sets users `isActive` field as `false`.
-   Then CRON module will delete all this kind of users every X days. */
    @Delete(':id')
-   deactivateOneById(
+   deactivateById(
       @Param('id', DeactivateUserPipe) id: string,
-   ): Promise<DeactivateOneByIdResponse> {
-      return this.usersService.deactivateOneById(id);
+   ): Promise<DeactivateUserByIdResponse> {
+      return this.usersService.deactivateById(id);
    }
 }
