@@ -19,8 +19,11 @@ import {
 import { ResponseStatus } from '../types/api/response';
 import { UpdateTradeDto } from './dto';
 import { User } from '../users/entities/user.entity';
-import { UserObject } from '../decorators/user.decorator';
+import { UserObject } from '../decorators/user-object.decorator';
 import { ValidateUserEnsPipe } from '../pipes/validate-user-ens.pipe';
+import { AddTradeHistoryDto } from './dto/add-trade-history.dto';
+import { TradeObject } from '../decorators/trade-object-from-param.decorator';
+import { Trade } from './entities/trade.entity';
 
 @Controller('trades')
 export class TradesController {
@@ -41,17 +44,25 @@ export class TradesController {
       return this.tradesService.getAll();
    }
 
-   @Get(':id')
+   @Get('/:id')
    getOneById(@Param('id') id: string): Promise<GetTradeByIdResponse> {
       return this.tradesService.getById(id);
    }
 
-   @Patch(':id')
+   @Patch('/:id')
    update(
       @Param('id') id: string,
       @Body() updateTradeDto: UpdateTradeDto,
    ): Promise<UpdatedTradeResponse> {
       return this.tradesService.update(id, updateTradeDto);
+   }
+
+   @Post('/trade-history/:tradeId')
+   async addHistory(
+      @TradeObject() trade: Trade,
+      @Body() addTradeHistoryDto: AddTradeHistoryDto,
+   ) {
+      await this.tradesService.addHistory({ ...addTradeHistoryDto, trade });
    }
 
    @Delete('/:id')

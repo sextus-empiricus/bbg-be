@@ -2,6 +2,8 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { DataSource } from 'typeorm';
 import { User } from '../users/entities/user.entity';
+import { TradeHistory } from '../trades/entities/trade-history.entity';
+import { Trade } from '../trades/entities/trade.entity';
 
 @Injectable()
 export class CronService {
@@ -9,7 +11,7 @@ export class CronService {
 
    @Cron(CronExpression.EVERY_WEEK)
    async deleteDeactivatedUsers() {
-      const deactivatedUsers = await this.dataSource
+      const deactivatedUsers: User[] = await this.dataSource
          .createQueryBuilder()
          .select()
          .select('user')
@@ -26,5 +28,26 @@ export class CronService {
             .execute();
       });
       console.log('CRON - deactivated users deleted from database.');
+   }
+
+   /*This function is clering from database unusefull `TradeHistory` records which are no realted to any `Trade` record.*/
+   @Cron(CronExpression.EVERY_WEEK)
+   async deleteUnrelatedTradeHistoryRecords() {
+      const unrelatedTradeHistoryRecords = await this.dataSource
+         .getRepository(TradeHistory)
+         .createQueryBuilder('tradeHistory')
+         .leftJoinAndSelect('tradeHistory.trade', 'trade')
+         .getMany();
+
+      unrelatedTradeHistoryRecords.map(async (el) => {
+         if (el.trade === null) {
+            await this.dataSource
+               .createQueryBuilder()
+               .delete()
+               .from(TradeHistory)
+               .where({ id: el.id })
+               .execute();
+         }
+      });
    }
 }

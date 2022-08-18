@@ -12,6 +12,8 @@ import {
 import { CreateTradeDtoInterface } from '../types/trades/dto/create-trade-dto.interface';
 import { TradeMinified } from '../types/trades/trade';
 import { UpdateTradeDto } from './dto';
+import { AddTradeHistoryDto } from './dto/add-trade-history.dto';
+import { TradeHistory } from './entities/trade-history.entity';
 
 interface CreateTradeData extends CreateTradeDtoInterface {
    user: User;
@@ -96,5 +98,19 @@ export class TradesService {
          .from(Trade)
          .where({ id })
          .execute();
+   }
+
+   async addHistory(addTradeHistoryDto: AddTradeHistoryDto) {
+      const { trade } = addTradeHistoryDto;
+      const { id } = (
+         await this.dataSource
+            .createQueryBuilder()
+            .insert()
+            .into(TradeHistory)
+            .values(addTradeHistoryDto)
+            .execute()
+      ).identifiers[0];
+      trade.tradeHistory = await TradeHistory.findOneBy({ id });
+      await trade.save();
    }
 }

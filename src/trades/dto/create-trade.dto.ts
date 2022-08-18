@@ -11,6 +11,9 @@ export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsString()
    currency: string;
 
+   @IsString()
+   boughtAt: string;
+
    @IsNumber()
    @IsPositive()
    boughtFor: number;
@@ -22,8 +25,4 @@ export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsNumber()
    @IsPositive()
    amount: number;
-
-   @IsString()
-   @IsOptional()
-   boughtAt: string;
 }
