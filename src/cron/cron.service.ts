@@ -30,7 +30,7 @@ export class CronService {
       console.log('CRON - deactivated users deleted from database.');
    }
 
-   /*This function is clering from database unusefull `TradeHistory` records which are no realted to any `Trade` record.*/
+   /*This function cleans database from unusefull `TradeHistory` records which are no realted to any `Trade` record.*/
    @Cron(CronExpression.EVERY_WEEK)
    async deleteUnrelatedTradeHistoryRecords() {
       const unrelatedTradeHistoryRecords = await this.dataSource

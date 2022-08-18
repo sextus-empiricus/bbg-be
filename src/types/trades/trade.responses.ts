@@ -1,12 +1,12 @@
 import { SuccessResponse } from '../api/response';
-import { TradeMinified } from './trade';
+import { TradeMinified } from './trade.interface';
 
 export interface CreateTradeResponse extends SuccessResponse {
    createdTradeId: string;
 }
 
 export interface GetAllTradesResponse extends SuccessResponse {
-   tradesList: TradeMinified[];
+   tradesList: TradeMinified[] | TradeMinified;
 }
 
 export interface GetTradeByIdResponse extends SuccessResponse {

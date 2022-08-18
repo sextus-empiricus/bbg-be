@@ -1,4 +1,4 @@
-import { IsBoolean, IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { Trade } from '../entities/trade.entity';
 
 export class AddTradeHistoryDto {

@@ -9,14 +9,14 @@ import {
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
 import { TradeHistory } from './trade-history.entity';
+import { TradeInterface } from '../../types/trades/trade.interface';
+import { User } from '../../users/entities/user.entity';
 
 @Entity()
-export class Trade extends BaseEntity {
+export class Trade extends BaseEntity implements TradeInterface {
    @PrimaryGeneratedColumn('uuid')
    id: string;
-
    @Column()
    currency: string;
 

@@ -1,8 +1,6 @@
 import { CreateTradeDtoInterface } from '../../types/trades/dto/create-trade-dto.interface';
 import {
-   IsDate,
    IsNumber,
-   IsOptional,
    IsPositive,
    IsString,
 } from 'class-validator';
