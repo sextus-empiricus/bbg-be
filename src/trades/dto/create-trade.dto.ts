@@ -1,5 +1,11 @@
 import { CreateTradeDtoInterface } from '../../types/trades/dto/create-trade-dto.interface';
-import { IsNumber, IsPositive, IsString } from 'class-validator';
+import {
+   IsDate,
+   IsNumber,
+   IsOptional,
+   IsPositive,
+   IsString,
+} from 'class-validator';
 
 export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsString()
@@ -16,4 +22,8 @@ export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsNumber()
    @IsPositive()
    amount: number;
+
+   @IsString()
+   @IsOptional()
+   boughtAt: string;
 }
