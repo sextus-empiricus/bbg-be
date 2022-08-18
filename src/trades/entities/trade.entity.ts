@@ -3,11 +3,14 @@ import {
    Column,
    CreateDateColumn,
    Entity,
+   JoinColumn,
    ManyToOne,
+   OneToOne,
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
+import { TradeHistory } from './trade-history.entity';
 
 @Entity()
 export class Trade extends BaseEntity {
@@ -60,5 +63,10 @@ export class Trade extends BaseEntity {
    })
    user: User;
 
-   //tradeHistory(oto)
+   @OneToOne(() => TradeHistory, (tradeHistory) => tradeHistory.trade, {
+      nullable: true,
+      onDelete: 'SET NULL',
+   })
+   @JoinColumn()
+   tradeHistory: TradeHistory;
 }
