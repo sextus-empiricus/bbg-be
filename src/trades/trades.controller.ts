@@ -8,7 +8,7 @@ import {
    Post,
 } from '@nestjs/common';
 import { TradesService } from './trades.service';
-import { CreateTradeDto } from './dto/create-trade.dto';
+import { CreateTradeDto } from './dto';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
@@ -16,11 +16,14 @@ import {
    GetTradeByIdResponse,
    UpdatedTradeResponse,
 } from '../types/trades/trade.responses';
-import { ResponseStatus } from '../types/api/response';
+import { AddTradeHistoryDto } from './dto/add-trade-history.dto';
+import { Trade } from './entities/trade.entity';
+import { TradeObject } from '../decorators/trade-object-from-param.decorator';
 import { UpdateTradeDto } from './dto';
 import { User } from '../users/entities/user.entity';
-import { UserObject } from '../decorators/user.decorator';
+import { UserObject } from '../decorators/user-object.decorator';
 import { ValidateUserEnsPipe } from '../pipes/validate-user-ens.pipe';
+import { CreateTradeHistoryResponse } from '../types/trades/trade-history.responses';
 
 @Controller('trades')
 export class TradesController {
@@ -41,12 +44,12 @@ export class TradesController {
       return this.tradesService.getAll();
    }
 
-   @Get(':id')
+   @Get('/:id')
    getOneById(@Param('id') id: string): Promise<GetTradeByIdResponse> {
       return this.tradesService.getById(id);
    }
 
-   @Patch(':id')
+   @Patch('/:id')
    update(
       @Param('id') id: string,
       @Body() updateTradeDto: UpdateTradeDto,
@@ -56,10 +59,18 @@ export class TradesController {
 
    @Delete('/:id')
    async remove(@Param('id') id: string): Promise<DeleteTradeByIdResponse> {
-      await this.tradesService.remove(id);
-      return {
-         status: ResponseStatus.success,
-         deletedTradeId: id,
-      };
+      return await this.tradesService.remove(id);
+   }
+
+   /*TRADE-HISTORY CONTROLLERS:*/
+   @Post('/trade-history/:tradeId')
+   async createTradeHistory(
+      @TradeObject() trade: Trade,
+      @Body() addTradeHistoryDto: AddTradeHistoryDto,
+   ): Promise<CreateTradeHistoryResponse> {
+      return await this.tradesService.createTradeHistory({
+         ...addTradeHistoryDto,
+         trade,
+      });
    }
 }

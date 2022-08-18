@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from '../config/app-config';
 import { UsersModule } from './users/users.module';
 import { CronModule } from './cron/cron.module';
+import { TradesModule } from './trades/trades.module';
 
 const { host, port, username, password, database } = appConfig.typeorm;
 
@@ -19,11 +20,12 @@ const { host, port, username, password, database } = appConfig.typeorm;
          database,
          entities: ['./dist/**/*.entity{.js,.ts}'],
          bigNumberStrings: false,
-         logging: true,
+         logging: false,
          synchronize: true,
       }),
       UsersModule,
       CronModule,
+      TradesModule,
    ],
    controllers: [AppController],
    providers: [AppService],
