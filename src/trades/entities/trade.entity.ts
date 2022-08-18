@@ -9,9 +9,9 @@ import {
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { TradeHistory } from './trade-history.entity';
 import { TradeInterface } from '../../types/trades/trade.interface';
 import { User } from '../../users/entities/user.entity';
+import { TradeHistory } from '../../trade-history/entities/trade-history.entity';
 
 @Entity()
 export class Trade extends BaseEntity implements TradeInterface {

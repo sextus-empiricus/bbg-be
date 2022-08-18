@@ -1,7 +1,8 @@
 import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
-import { Trade } from '../entities/trade.entity';
+import { Trade } from '../../trades/entities/trade.entity';
+import { CreateTradeHistoryDtoInterface } from '../../types/trade-history/dto/create-trade-history-dto.interface';
 
-export class AddTradeHistoryDto {
+export class CreateTradeHistoryDto implements CreateTradeHistoryDtoInterface {
    @IsString()
    soldAt: string;
 
@@ -19,6 +20,5 @@ export class AddTradeHistoryDto {
 
    @IsObject()
    @IsOptional()
-   trade?: Trade
+   trade?: Trade;
 }
-

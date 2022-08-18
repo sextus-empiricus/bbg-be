@@ -1,4 +1,4 @@
-import { TradeHistoryMinfied } from './trade-history.interface';
+import { TradeHistoryMinfied } from '../trade-history/trade-history.interface';
 
 export interface TradeInterface {
    id: string;

@@ -6,7 +6,7 @@ import {
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { Trade } from './trade.entity';
+import { Trade } from '../../trades/entities/trade.entity';
 
 @Entity()
 export class TradeHistory extends BaseEntity {
