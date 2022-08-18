@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@nestjs/common';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { DataSource } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
+import { TradeHistory } from '../trade-history/entities/trade-history.entity';
 import { User } from '../users/entities/user.entity';
-import { TradeHistory } from '../trades/entities/trade-history.entity';
-import { Trade } from '../trades/entities/trade.entity';
 
 @Injectable()
 export class CronService {
