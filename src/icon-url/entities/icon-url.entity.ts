@@ -1,4 +1,5 @@
 import {
+   BaseEntity,
    Column,
    CreateDateColumn,
    Entity,
@@ -9,7 +10,7 @@ import {
 import { Trade } from '../../trades/entities/trade.entity';
 
 @Entity()
-export class IconUrl {
+export class IconUrl extends BaseEntity{
    @PrimaryColumn()
    symbol: string;
 

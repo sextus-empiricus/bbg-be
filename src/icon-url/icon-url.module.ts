@@ -4,6 +4,7 @@ import { IconUrlController } from './icon-url.controller';
 
 @Module({
   controllers: [IconUrlController],
-  providers: [IconUrlService]
+  providers: [IconUrlService],
+  exports: [IconUrlService]
 })
 export class IconUrlModule {}

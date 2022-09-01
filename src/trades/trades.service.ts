@@ -21,7 +21,7 @@ interface CreateTradeData extends CreateTradeDtoInterface {
 @Injectable()
 export class TradesService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
-   /*ℹThis filter cleans dry db fetched data and removes all unusefull rows for client (as `createdAt` etc.).*/
+   /*ℹThis filter cleans dry db fetched data and removes all unusefull rows for a client (as `createdAt` etc.).*/
    private outputFilter(
       trades: Trade[] | Trade | null,
    ): TradeMinified[] | TradeMinified | null {
