@@ -12,7 +12,7 @@ export interface TradeHistoryInterface {
    trade: Trade;
 }
 
-export type TradeHistoryMinfied = Omit<
+export type TradeHistoryInterfaceMinfied = Omit<
    TradeHistoryInterface,
    'trade' | 'createdAt' | 'updatedAt'
 >;

@@ -5,6 +5,7 @@ import {
    Entity,
    JoinColumn,
    ManyToOne,
+   OneToMany,
    OneToOne,
    PrimaryGeneratedColumn,
    UpdateDateColumn,
@@ -12,9 +13,10 @@ import {
 import { TradeInterface } from '../../types/trades/trade.interface';
 import { User } from '../../users/entities/user.entity';
 import { TradeHistory } from '../../trade-history/entities/trade-history.entity';
+import { IconUrl } from '../../icon-url/entities/icon-url.entity';
 
 @Entity()
-export class Trade extends BaseEntity implements TradeInterface {
+export class Trade extends BaseEntity {
    @PrimaryGeneratedColumn('uuid')
    id: string;
    @Column()
@@ -69,4 +71,9 @@ export class Trade extends BaseEntity implements TradeInterface {
    })
    @JoinColumn()
    tradeHistory: TradeHistory;
+
+   @ManyToOne(() => IconUrl, (iconUrl) => iconUrl.trade, {
+      onDelete: 'SET NULL',
+   })
+   iconUrl: IconUrl;
 }

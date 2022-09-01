@@ -25,7 +25,7 @@ import { ValidateUserEnsPipe } from '../pipes/validate-user-ens.pipe';
 export class TradesController {
    constructor(private readonly tradesService: TradesService) {}
    /*This route will be changed. User object will be assigned by `@UserObject()` decorator
-   by user's id passed in token. Then 'user/userId' path won't be needed anymore. */
+   by user's id passed in token. Then 'user/userId' path won't be needed anymore.*/
    @Post('/user/:userId')
    create(
       @Body() createTradeDto: CreateTradeDto,
