@@ -1,4 +1,5 @@
-import { TradeHistoryMinfied } from '../trade-history/trade-history.interface';
+import { TradeHistoryInterfaceMinfied } from '../trade-history/trade-history.interface';
+import { IconUrlInterfaceMinified } from '../icon-url/icon-url.interface';
 
 export interface TradeInterface {
    id: string;
@@ -10,7 +11,8 @@ export interface TradeInterface {
    inExchange: boolean;
    createdAt: Date;
    updatedAt: Date;
-   tradeHistory: TradeHistoryMinfied | null;
+   tradeHistory: TradeHistoryInterfaceMinfied | null;
+   iconUrl: IconUrlInterfaceMinified | null;
 }
 
 export type TradeMinified = Omit<TradeInterface, 'createdAt' | 'updatedAt'>;

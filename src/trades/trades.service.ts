@@ -4,7 +4,8 @@ import { ResponseStatus } from '../types/api/response';
 import { Trade } from './entities/trade.entity';
 import { User } from '../users/entities/user.entity';
 import {
-   CreateTradeResponse, DeleteTradeByIdResponse,
+   CreateTradeResponse,
+   DeleteTradeByIdResponse,
    GetAllTradesResponse,
    GetTradeByIdResponse,
    UpdatedTradeResponse,
@@ -20,7 +21,7 @@ interface CreateTradeData extends CreateTradeDtoInterface {
 @Injectable()
 export class TradesService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
-
+   /*ℹThis filter cleans dry db fetched data and removes all unusefull rows for a client (as `createdAt` etc.).*/
    private outputFilter(
       trades: Trade[] | Trade | null,
    ): TradeMinified[] | TradeMinified | null {
@@ -32,30 +33,42 @@ export class TradesService {
       if (Array.isArray(trades)) {
          return trades.map((el) => {
             let tradeHistory = null;
+            let iconUrl = null;
             if (el.tradeHistory) {
                const { createdAt, updatedAt, ...tradeHistoryMini } =
                   el.tradeHistory;
                tradeHistory = tradeHistoryMini;
             }
+            if (el.iconUrl) {
+               const { url } = el.iconUrl;
+               iconUrl = url;
+            }
             const { createdAt, updatedAt, ...trade } = el;
-            return { ...trade, tradeHistory };
+            return { ...trade, tradeHistory, iconUrl };
          });
       }
       /*If trades is a signle `Trade` object:*/
       const { createdAt, updatedAt, ...trade } = trades;
       let tradeHistory = null;
+      let iconUrl = null;
       if (trade.tradeHistory) {
          const { createdAt, updatedAt, ...tradeHistoryMini } =
             trade.tradeHistory;
          tradeHistory = tradeHistoryMini;
       }
+      if (trade.iconUrl) {
+         const { url } = trade.iconUrl;
+         iconUrl = url;
+      }
       return {
          ...trade,
          tradeHistory,
+         iconUrl,
       };
    }
 
    async create(data: CreateTradeData): Promise<CreateTradeResponse> {
+      //🚨here should be implemented logic of curr-icon fetching
       const insertResult: InsertResult = await this.dataSource
          .createQueryBuilder()
          .insert()
@@ -73,6 +86,7 @@ export class TradesService {
          .getRepository(Trade)
          .createQueryBuilder('trade')
          .leftJoinAndSelect('trade.tradeHistory', 'tradeHistory')
+         .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .getMany();
       return {
          status: ResponseStatus.success,
@@ -85,6 +99,7 @@ export class TradesService {
          .getRepository(Trade)
          .createQueryBuilder('trade')
          .leftJoinAndSelect('trade.tradeHistory', 'tradeHistory')
+         .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .where('trade.id = :id', { id })
          .getOne();
 
