@@ -24,7 +24,7 @@ export class AttachIconToTradePipe implements PipeTransform {
       If not it will fetch an external API to get a currency icon url, then create an entity of new currency in DB
       and finaly attach it to a DTO. In a case a provided symbol wasn't found it returns null.*/
       const { currency: symbol } = createTradeDto;
-      let iconUrl = await this.iconUrlService.findOneBySymbol(symbol);
+      let iconUrl = await this.iconUrlService.getOneBySymbol(symbol);
       if (iconUrl === null) {
          try {
             //1. fech external API for a currnecy icon url;
@@ -40,7 +40,7 @@ export class AttachIconToTradePipe implements PipeTransform {
                symbol,
                url,
             });
-            iconUrl = await this.iconUrlService.findOneBySymbol(symbol);
+            iconUrl = await this.iconUrlService.getOneBySymbol(symbol);
          } catch (e) {
             //3. if it's failed - do nth. We want to let a user add his trade anyway.
             console.log(e.code);

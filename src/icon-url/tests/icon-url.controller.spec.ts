@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IconUrlController } from './icon-url.controller';
-import { IconUrlService } from './icon-url.service';
+import { IconUrlController } from '../icon-url.controller';
+import { IconUrlService } from '../icon-url.service';
 
 describe('IconUrlController', () => {
   let controller: IconUrlController;
