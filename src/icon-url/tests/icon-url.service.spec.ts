@@ -68,7 +68,7 @@ describe('IconUrlService', () => {
          await service.create(dtoMock);
          expect(spy).toHaveBeenCalledWith(IconUrl);
       });
-      it('should call a dataSource.value which a proper DTO', async () => {
+      it('should call a dataSource.value which a proper dto', async () => {
          const spy = jest.spyOn(
             dataSource.createQueryBuilder().insert(),
             'values',
@@ -80,7 +80,7 @@ describe('IconUrlService', () => {
    describe('findOneBySymbol', () => {
       const mockSymbol = 'btc';
       it('should return IconUrl object', async () => {
-         expect(await service.getOneBySymbol(mockSymbol)).toStrictEqual({
+         expect(await service.getBySymbol(mockSymbol)).toStrictEqual({
             symbol: expect.any(String),
             url: expect.any(String),
             createdAt: expect.any(Date),
@@ -89,17 +89,17 @@ describe('IconUrlService', () => {
       });
       it('should call a dataSource.select which a proper selection', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'select');
-         await service.getOneBySymbol(mockSymbol);
+         await service.getBySymbol(mockSymbol);
          expect(spy).toBeCalledWith('iconUrl');
       });
       it('should call a dataSource.from which a IconUrl entity', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
-         await service.getOneBySymbol(mockSymbol);
+         await service.getBySymbol(mockSymbol);
          expect(spy).toBeCalledWith(IconUrl, 'iconUrl');
       });
       it('should call a dataSource.where which a provided symbol', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
-         await service.getOneBySymbol(mockSymbol);
+         await service.getBySymbol(mockSymbol);
          expect(spy).toBeCalledWith({ symbol: mockSymbol });
       });
    });

@@ -18,7 +18,7 @@ export class IconUrlService {
       return insertResult.identifiers[0].symbol;
    }
 
-   async getOneBySymbol(symbol: string): Promise<IconUrlInterface> | null {
+   async getBySymbol(symbol: string): Promise<IconUrlInterface> | null {
       return await this.dataSource
          .createQueryBuilder()
          .select('iconUrl')

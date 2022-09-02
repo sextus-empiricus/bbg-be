@@ -63,20 +63,20 @@ describe('UsersController', () => {
          email: 'test@test.test',
          password: 'test1234',
       };
-      it('should return a proper response object', async () => {
+      it('should return `CreateUserResponse` object', async () => {
          expect(await controller.create(mockDto)).toStrictEqual({
             status: ResponseStatus.success,
             createdUserId: expect.any(String),
          });
       });
-      it('should pass to UsersService a proper dto object', async () => {
+      it('should pass to UsersService a proper dto', async () => {
          const spy = jest.spyOn(service, 'create');
          await controller.create(mockDto);
          expect(spy).toHaveBeenCalledWith(mockDto);
       });
    });
    describe('getAll', () => {
-      it('should return a proper response object', async () => {
+      it('should return `GetAllUsersResponse` object', async () => {
          expect(await controller.getAll()).toStrictEqual({
             status: ResponseStatus.success,
             usersList: [
@@ -98,7 +98,7 @@ describe('UsersController', () => {
 
    describe('getById', () => {
       const mockId = 'test1234';
-      it('should return a proper response object', async () => {
+      it('should return `GetUserByIdResponse` object', async () => {
          expect(await controller.getById(mockId)).toStrictEqual({
             status: ResponseStatus.success,
             user: {
@@ -117,7 +117,7 @@ describe('UsersController', () => {
    });
    describe('deactivateById', () => {
       const mockId = 'test1234';
-      it('should return a proper response objcect', async () => {
+      it('should return `DeactivateUserByIdResponse` objcect', async () => {
          expect(await controller.deactivateById(mockId)).toStrictEqual({
             status: ResponseStatus.success,
             deactivatedUserId: 'test1234',
