@@ -1,10 +1,9 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Post, Body, } from '@nestjs/common';
 import { CreateTradeHistoryDto } from './dto/create-trade-history.dto';
 import { CreateTradeHistoryResponse } from '../types/trade-history/trade-history.responses';
 import { Trade } from '../trades/entities/trade.entity';
 import { TradeHistoryService } from './trade-history.service';
 import { TradeObject } from '../decorators/trade-object-from-param.decorator';
-import { UpdateTradeHistoryDto } from './dto/update-trade-history.dto';
 
 @Controller('trade-history')
 export class TradeHistoryController {

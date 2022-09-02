@@ -69,7 +69,7 @@ describe('UsersController', () => {
             createdUserId: expect.any(String),
          });
       });
-      it('should pass to UsersService a proper dto', async () => {
+      it('should pass to `UsersService` a proper dto', async () => {
          const spy = jest.spyOn(service, 'create');
          await controller.create(mockDto);
          expect(spy).toHaveBeenCalledWith(mockDto);
@@ -89,7 +89,7 @@ describe('UsersController', () => {
             ],
          });
       });
-      it('should call UsersService.getAll', async () => {
+      it('should call `UsersService`.getAll', async () => {
          const spy = jest.spyOn(service, 'getAll');
          await controller.getAll();
          expect(spy).toBeCalled();
@@ -109,7 +109,7 @@ describe('UsersController', () => {
             },
          });
       });
-      it('should call UsersService.getById with proper id', async () => {
+      it('should call `UsersService.getById` with proper id', async () => {
          const spy = jest.spyOn(service, 'getById');
          await controller.getById(mockId);
          expect(spy).toBeCalledWith(mockId);
@@ -123,7 +123,7 @@ describe('UsersController', () => {
             deactivatedUserId: 'test1234',
          });
       });
-      it('should call UsersService.deactivateById with proper id', async () => {
+      it('should call `UsersService.deactivateById` with proper id', async () => {
          const spy = jest.spyOn(service, 'deactivateById');
          await controller.deactivateById(mockId);
          expect(spy).toBeCalledWith(mockId);

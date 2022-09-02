@@ -73,7 +73,7 @@ describe('UsersService', () => {
             createdUserId: expect.any(String),
          });
       });
-      it('should call datasource.into with the User entity', async () => {
+      it('should call `dataSource.into` with the User entity', async () => {
          const spy = jest.spyOn(
             dataSource.createQueryBuilder().insert(),
             'into',
