@@ -21,12 +21,10 @@ describe('TradeHistoryService', () => {
                   //general:
                   createQueryBuilder: jest.fn().mockReturnThis(),
                   where: jest.fn().mockReturnThis(),
-                  execute: jest
-                     .fn()
-                     .mockImplementationOnce(() => ({
-                        identifiers: [{ id: 'test1234' }],
-                     }))
-                     .mockImplementationOnce(() => ({} as TradeHistory)),
+                  execute: jest.fn(() => ({
+                     identifiers: [{ id: 'test1234' }],
+                  })),
+                  getOne: jest.fn(() => ({} as TradeHistory)),
                   //insert:
                   insert: jest.fn().mockReturnThis(),
                   into: jest.fn().mockReturnThis(),

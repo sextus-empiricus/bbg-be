@@ -43,7 +43,7 @@ export class TradesController {
    }
 
    @Get('/:id')
-   getOneById(@Param('id') id: string): Promise<GetTradeByIdResponse> {
+   getById(@Param('id') id: string): Promise<GetTradeByIdResponse> {
       return this.tradesService.getById(id);
    }
 

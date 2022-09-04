@@ -33,12 +33,12 @@ export class TradeHistoryService {
             .execute()
       ).identifiers[0];
 
-      const createdTradeHistory = await this.dataSource
+      const createdTradeHistory: TradeHistory = await this.dataSource
          .createQueryBuilder()
          .select('tradeHistory')
          .from(TradeHistory, 'tradeHistory')
          .where({ id: tradeHistoryId })
-         .execute();
+         .getOne();
 
       await this.dataSource
          .createQueryBuilder()
