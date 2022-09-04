@@ -3,7 +3,6 @@ import { DataSource } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { TradeHistory } from '../trade-history/entities/trade-history.entity';
 import { User } from '../users/entities/user.entity';
-import { Trade } from '../trades/entities/trade.entity';
 
 @Injectable()
 export class CronService {
@@ -29,7 +28,6 @@ export class CronService {
             .where({ id: el.id })
             .execute();
       });
-      console.log('CRON - deactivated users deleted from database.');
    }
 
    /*This fn() cleans database from unusefull `TradeHistory` records which are no realted to any `Trade` record if exists..*/
