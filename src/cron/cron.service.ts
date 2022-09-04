@@ -8,11 +8,13 @@ import { User } from '../users/entities/user.entity';
 export class CronService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
 
-   @Cron(CronExpression.EVERY_WEEK)
+   /*This fn() removes disactivated users every day.
+   💡TODO Make it better! Check if user.!isActive and if from now to user.updatedAt pass 7 days.
+   */
+   @Cron(CronExpression.EVERY_DAY_AT_1AM)
    async deleteDeactivatedUsers() {
       const deactivatedUsers: User[] = await this.dataSource
          .createQueryBuilder()
-         .select()
          .select('user')
          .from(User, 'user')
          .where({ isActive: false })
@@ -22,28 +24,29 @@ export class CronService {
          await this.dataSource
             .createQueryBuilder()
             .delete()
-            .from(User)
+            .from(User, 'user')
             .where({ id: el.id })
             .execute();
       });
-      console.log('CRON - deactivated users deleted from database.');
    }
 
-   /*This function cleans database from unusefull `TradeHistory` records which are no realted to any `Trade` record.*/
-   @Cron(CronExpression.EVERY_WEEK)
+   /*This fn() cleans database from unusefull `TradeHistory` records which are no realted to any `Trade` record if exists..*/
+   @Cron(CronExpression.EVERY_10_SECONDS)
    async deleteUnrelatedTradeHistoryRecords() {
-      const unrelatedTradeHistoryRecords = await this.dataSource
-         .getRepository(TradeHistory)
-         .createQueryBuilder('tradeHistory')
+      const tradeHistoryRecords = await this.dataSource
+         .createQueryBuilder()
+         .select('tradeHistory')
+         .from(TradeHistory, 'tradeHistory')
          .leftJoinAndSelect('tradeHistory.trade', 'trade')
+         //🤔 can't achieve tradeHistory.trade. maybe because trade is a dominant side of rel;
          .getMany();
 
-      unrelatedTradeHistoryRecords.map(async (el) => {
+      tradeHistoryRecords.map(async (el) => {
          if (el.trade === null) {
             await this.dataSource
                .createQueryBuilder()
                .delete()
-               .from(TradeHistory)
+               .from(TradeHistory, 'tradeHistory')
                .where({ id: el.id })
                .execute();
          }
