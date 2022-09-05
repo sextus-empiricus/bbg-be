@@ -15,7 +15,8 @@ import { UserMinified } from '../types/users/user';
 export class UsersService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
 
-   private outputFilter(users: User[]): UserMinified[] {
+   private outputFilter(users: User[] | null): UserMinified[] | null {
+      if (users.length < 1) return null;
       return users.map((el) => {
          return {
             id: el.id,

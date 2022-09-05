@@ -9,5 +9,6 @@ import { UsersModule } from '../users/users.module';
    imports: [IconUrlModule, HttpModule, UsersModule],
    controllers: [TradesController],
    providers: [TradesService],
+   exports: [TradesService],
 })
 export class TradesModule {}

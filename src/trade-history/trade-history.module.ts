@@ -1,9 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TradeHistoryService } from './trade-history.service';
 import { TradeHistoryController } from './trade-history.controller';
+import { TradesModule } from '../trades/trades.module';
 
 @Module({
-  controllers: [TradeHistoryController],
-  providers: [TradeHistoryService]
+   imports: [TradesModule],
+   controllers: [TradeHistoryController],
+   providers: [TradeHistoryService],
 })
-export class TradeHistoryModule {}
+export class TradeHistoryModule {
+}
