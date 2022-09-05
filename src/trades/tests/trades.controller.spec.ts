@@ -5,7 +5,6 @@ import { ResponseStatus } from '../../types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TradesController } from '../trades.controller';
 import { TradesService } from '../trades.service';
-import { User } from '../../users/entities/user.entity';
 import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('TradesController', () => {
@@ -109,18 +108,18 @@ describe('TradesController', () => {
          price: 1,
          amount: 1,
       };
-      const mockUser = new User();
+      const mockUserId = 'user1'
 
       it('should return `CreateTradeResponse` object', async () => {
-         expect(await controller.create(mockDto, mockUser)).toStrictEqual({
+         expect(await controller.create(mockDto, mockUserId)).toStrictEqual({
             status: ResponseStatus.success,
             createdTradeId: expect.any(String),
          });
       });
       it('should call `UsersService` with a proper dto', async () => {
          const spy = jest.spyOn(tradesService, 'create');
-         await controller.create(mockDto, mockUser);
-         expect(spy).toHaveBeenCalledWith({ ...mockDto, user: mockUser });
+         await controller.create(mockDto, mockUserId);
+         expect(spy).toHaveBeenCalledWith(mockDto, mockUserId);
       });
    });
    describe('getAll', () => {
