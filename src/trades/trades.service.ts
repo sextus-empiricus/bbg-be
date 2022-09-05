@@ -14,31 +14,28 @@ import { CreateTradeDtoInterface } from '../types/trades/dto/create-trade-dto.in
 import { TradeMinified } from '../types/trades/trade.interface';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
 import { outputFilter } from './utils/outputFilter';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TradesService {
-   constructor(@Inject(DataSource) private dataSource: DataSource) {}
+   constructor(
+      @Inject(DataSource) private dataSource: DataSource,
+      @Inject(UsersService) private usersService: UsersService,
+   ) {}
 
    async create(
       dto: CreateTradeDto,
       userId: string,
    ): Promise<CreateTradeResponse> {
-      const targetUser = await this.dataSource
-         .createQueryBuilder()
-         .select('user')
-         .from(User, 'user')
-         .where({ id: userId })
-         .getOne();
-
-      if (targetUser === null) {
+      const { user } = await this.usersService.getById(userId);
+      if (user === null) {
          throw new ConflictException('No user found matches provided id.');
       }
-
       const insertResult: InsertResult = await this.dataSource
          .createQueryBuilder()
          .insert()
          .into(Trade)
-         .values({ ...dto, user: targetUser })
+         .values({ ...dto, user })
          .execute();
       return {
          status: ResponseStatus.success,
@@ -46,8 +43,8 @@ export class TradesService {
       };
    }
 
-   //💡DIFFERENT APPROACH EXAMPLE:
-   /*   async getAll(): Promise<GetAllTradesResponse> {
+   /*💡DIFFERENT APPROACH EXAMPLE:
+      async getAll(): Promise<GetAllTradesResponse> {
          const tradesList = await this.dataSource
             .getRepository(Trade)
             .createQueryBuilder('trade')
@@ -59,7 +56,7 @@ export class TradesService {
             tradesList: outputFilter(tradesList),
          };
       }
-      */
+   */
 
    async getAll(): Promise<GetAllTradesResponse> {
       const tradesList = await this.dataSource

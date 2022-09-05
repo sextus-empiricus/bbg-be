@@ -58,6 +58,7 @@ export class UsersService {
          .from(User, 'user')
          .where({ id })
          .getOne();
+
       return {
          status: ResponseStatus.success,
          user: this.outputFilter([user])[0],
