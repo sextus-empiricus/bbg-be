@@ -9,23 +9,11 @@ import { DataSource, InsertResult } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { ResponseStatus } from '../types/api/response';
 import { User } from './entities/user.entity';
-import { UserMinified } from '../types/users/user';
+import { outputFilter } from './utils/outputFilter';
 
 @Injectable()
 export class UsersService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
-
-   private outputFilter(users: User[] | null): UserMinified[] | null {
-      if (users.length < 1) return null;
-      return users.map((el) => {
-         return {
-            id: el.id,
-            email: el.email,
-            password: el.password,
-            authToken: el.authToken,
-         };
-      });
-   }
 
    async create(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
       const insertResult: InsertResult = await this.dataSource
@@ -48,7 +36,7 @@ export class UsersService {
          .getMany();
       return {
          status: ResponseStatus.success,
-         usersList: this.outputFilter(usersList),
+         usersList: outputFilter(usersList),
       };
    }
 
@@ -62,7 +50,7 @@ export class UsersService {
 
       return {
          status: ResponseStatus.success,
-         user: this.outputFilter([user])[0],
+         user: outputFilter(user)[0],
       };
    }
 

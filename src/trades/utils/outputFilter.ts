@@ -6,13 +6,13 @@ import { TradeMinified } from '../../types/trades/trade.interface';
   At the begining that function was an internal part of `TradesService` class.
   I decided to move it to external file to make class code cleaner and manage easier with testitng it as private method.
   Jest.js doesn't have access to private methods declared within the class.
-  */
+*/
 export const outputFilter = (
    trades: Trade[] | Trade | null,
-): TradeMinified[] | null => {
+): TradeMinified[] => {
    /*If `trades` is a null*/
    if (trades === null) {
-      return null;
+      return [null];
    }
    /*If `trades` is an array:*/
    if (Array.isArray(trades)) {
