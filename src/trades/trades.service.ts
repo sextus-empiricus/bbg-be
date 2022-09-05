@@ -77,7 +77,6 @@ export class TradesService {
          .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .where('trade.id = :id', { id })
          .getOne();
-
       return {
          status: ResponseStatus.success,
          trade: outputFilter(trade)[0] as TradeMinified,
