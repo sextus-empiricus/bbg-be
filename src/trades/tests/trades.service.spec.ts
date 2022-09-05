@@ -4,6 +4,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Trade } from '../entities/trade.entity';
 import { TradesService } from '../trades.service';
 import { User } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/users.service';
 
 describe('TradesService', () => {
    let service: TradesService;
@@ -55,10 +56,21 @@ describe('TradesService', () => {
       iconUrl: expect.any(String),
    };
 
+   const mockUser = {} as User;
+
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             TradesService,
+            {
+               provide: UsersService,
+               useValue: {
+                  getById: jest.fn().mockResolvedValue({
+                     status: ResponseStatus.success,
+                     user: mockUser
+                  }),
+               },
+            },
             {
                provide: DataSource,
                useValue: {
@@ -75,7 +87,7 @@ describe('TradesService', () => {
                   from: jest.fn().mockReturnThis(),
                   leftJoinAndSelect: jest.fn().mockReturnThis(),
                   where: jest.fn().mockReturnThis(),
-                  getOne: jest.fn(() => mockTrade),
+                  getOne: jest.fn().mockResolvedValueOnce(mockTrade),
                   getMany: jest.fn().mockResolvedValue([mockTrade]),
                   //update:
                   update: jest.fn().mockReturnThis(),
@@ -96,22 +108,23 @@ describe('TradesService', () => {
       expect(service).toBeDefined();
    });
    describe('create', () => {
+      const mockUserId = 'user1';
       const mockDto = {
-         currency: 'eth',
-         boughtFor: 1,
-         price: 1,
-         amount: 1,
-         user: {} as User,
+         boughtAt: '2022-12-06',
+         currency: 'btc',
+         boughtFor: 500,
+         price: 1000,
+         amount: 0.5,
       };
       it('should return `CreateTradeResponse` object', async () => {
-         expect(await service.create(mockDto)).toStrictEqual({
+         expect(await service.create(mockDto, mockUserId)).toStrictEqual({
             status: ResponseStatus.success,
             createdTradeId: expect.any(String),
          });
       });
       it('should create query builder once', async () => {
          const spy = jest.spyOn(dataSource, 'createQueryBuilder');
-         await service.create(mockDto);
+         await service.create(mockDto, mockUserId);
          expect(spy).toBeCalledTimes(1);
       });
       it('should call `dataSource.into` with the Trade entity', async () => {
@@ -119,7 +132,7 @@ describe('TradesService', () => {
             dataSource.createQueryBuilder().insert(),
             'into',
          );
-         await service.create(mockDto);
+         await service.create(mockDto, mockUserId);
          expect(spy).toBeCalledWith(Trade);
       });
       it('should call a dataSource.value which a proper dto', async () => {
@@ -127,8 +140,8 @@ describe('TradesService', () => {
             dataSource.createQueryBuilder().insert(),
             'values',
          );
-         await service.create(mockDto);
-         expect(spy).toHaveBeenCalledWith(mockDto);
+         await service.create(mockDto, mockUserId);
+         expect(spy).toHaveBeenCalledWith({ ...mockDto, user: mockUser });
       });
    });
    describe('getAll', () => {

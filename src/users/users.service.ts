@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto';
-import { DataSource, InsertResult } from 'typeorm';
-import { User } from './entities/user.entity';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
    GetUserByIdResponse,
 } from '../types/users/users.responses';
+import { CreateUserDto } from './dto';
+import { DataSource, InsertResult } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 import { ResponseStatus } from '../types/api/response';
+import { User } from './entities/user.entity';
 import { UserMinified } from '../types/users/user';
 
 @Injectable()
