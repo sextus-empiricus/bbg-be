@@ -17,24 +17,21 @@ import {
    UpdatedTradeResponse,
 } from '../types/trades/trade.responses';
 import { UpdateTradeDto } from './dto';
-import { User } from '../users/entities/user.entity';
-import { UserObject } from '../decorators/user-object.decorator';
-import { ValidateUserEnsPipe } from '../pipes/validate-user-ens.pipe';
 import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 
 @Controller('trades')
 export class TradesController {
-   constructor(
-      private readonly tradesService: TradesService,
-   ) {}
-   /*This route will be changed. User object will be assigned by `@UserObject()` decorator
+   constructor(private readonly tradesService: TradesService) {}
+
+   /*💡This route will be changed after auth logic implement. User object will be assigned by `@UserObject()` decorator
    by user's id passed in token. Then 'user/userId' path won't be needed anymore.*/
    @Post('/user/:userId')
    create(
       @Body(AttachIconToTradePipe) createTradeDto: CreateTradeDto,
-      @UserObject(ValidateUserEnsPipe) user: User,
+      @Param('userId') userId: string,
+      // @UserObject(ValidateUserEnsPipe) user: User, || 🔍 comments in @UserObject() decor.
    ): Promise<CreateTradeResponse> {
-      return this.tradesService.create({ ...createTradeDto, user });
+      return this.tradesService.create(createTradeDto, userId);
    }
 
    @Get('/')
