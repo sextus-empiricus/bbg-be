@@ -2,10 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { ResponseStatus } from '../../types/api/response';
+import { DataSource } from 'typeorm';
+import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('UsersController', () => {
    let controller: UsersController;
    let service: UsersService;
+   let dataSource: DataSource;
 
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
@@ -44,11 +47,16 @@ describe('UsersController', () => {
                   })),
                },
             },
+            {
+               provide: getDataSourceToken(),
+               useValue: {},
+            },
          ],
       }).compile();
 
       controller = module.get<UsersController>(UsersController);
       service = module.get<UsersService>(UsersService);
+      dataSource = module.get<DataSource>(DataSource);
    });
 
    it('UsersController be defined', () => {
