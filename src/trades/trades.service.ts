@@ -1,5 +1,5 @@
 import { DataSource, InsertResult } from 'typeorm';
-import { Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ResponseStatus } from '../types/api/response';
 import { Trade } from './entities/trade.entity';
 import { User } from '../users/entities/user.entity';
@@ -12,23 +12,33 @@ import {
 } from '../types/trades/trade.responses';
 import { CreateTradeDtoInterface } from '../types/trades/dto/create-trade-dto.interface';
 import { TradeMinified } from '../types/trades/trade.interface';
-import { UpdateTradeDto } from './dto';
+import { CreateTradeDto, UpdateTradeDto } from './dto';
 import { outputFilter } from './utils/outputFilter';
-
-interface CreateTradeData extends CreateTradeDtoInterface {
-   user: User;
-}
 
 @Injectable()
 export class TradesService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
 
-   async create(dto: CreateTradeData): Promise<CreateTradeResponse> {
+   async create(
+      dto: CreateTradeDto,
+      userId: string,
+   ): Promise<CreateTradeResponse> {
+      const targetUser = await this.dataSource
+         .createQueryBuilder()
+         .select('user')
+         .from(User, 'user')
+         .where({ id: userId })
+         .getOne();
+
+      if (targetUser === null) {
+         throw new ConflictException('No user found matches provided id.');
+      }
+
       const insertResult: InsertResult = await this.dataSource
          .createQueryBuilder()
          .insert()
          .into(Trade)
-         .values(dto)
+         .values({ ...dto, user: targetUser })
          .execute();
       return {
          status: ResponseStatus.success,
