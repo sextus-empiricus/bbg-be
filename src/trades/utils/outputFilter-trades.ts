@@ -7,7 +7,7 @@ import { TradeMinified } from '../../types/trades/trade.interface';
   I decided to move it to external file to make class code cleaner and manage easier with testitng it as private method.
   Jest.js doesn't have access to private methods declared within the class.
 */
-export const outputFilter = (
+export const outputFilterTrades = (
    trades: Trade[] | Trade | null,
 ): TradeMinified[] => {
    /*If `trades` is a null*/

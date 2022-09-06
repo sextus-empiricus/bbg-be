@@ -9,7 +9,7 @@ import { DataSource, InsertResult } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
 import { ResponseStatus } from '../types/api/response';
 import { User } from './entities/user.entity';
-import { outputFilter } from './utils/outputFilter';
+import { outputFilterUsers } from './utils/outputFilter-users';
 
 @Injectable()
 export class UsersService {
@@ -36,7 +36,7 @@ export class UsersService {
          .getMany();
       return {
          status: ResponseStatus.success,
-         usersList: outputFilter(usersList),
+         usersList: outputFilterUsers(usersList),
       };
    }
 
@@ -50,7 +50,7 @@ export class UsersService {
 
       return {
          status: ResponseStatus.success,
-         user: outputFilter(user)[0],
+         user: outputFilterUsers(user)[0],
       };
    }
 

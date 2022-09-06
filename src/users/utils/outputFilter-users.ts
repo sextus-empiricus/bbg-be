@@ -1,7 +1,7 @@
 import { User } from '../entities/user.entity';
 import { UserMinified } from '../../types/users/user';
 
-export const outputFilter = (
+export const outputFilterUsers = (
    users: User[] | User | null,
 ): UserMinified[] => {
    /*If users is a null:*/
@@ -20,6 +20,6 @@ export const outputFilter = (
       });
    }
    /*If users is an object:*/
-   const { createdAt, updatedAt } = users;
-   return [users];
+   const { createdAt, updatedAt, isActive, ...user } = users;
+   return [user];
 };

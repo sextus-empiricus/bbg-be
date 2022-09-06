@@ -12,7 +12,7 @@ import { ResponseStatus } from '../types/api/response';
 import { Trade } from './entities/trade.entity';
 import { TradeMinified } from '../types/trades/trade.interface';
 import { UsersService } from '../users/users.service';
-import { outputFilter } from './utils/outputFilter';
+import { outputFilterTrades } from './utils/outputFilter-trades';
 
 @Injectable()
 export class TradesService {
@@ -64,7 +64,7 @@ export class TradesService {
          .getMany();
       return {
          status: ResponseStatus.success,
-         tradesList: outputFilter(tradesList),
+         tradesList: outputFilterTrades(tradesList),
       };
    }
 
@@ -79,7 +79,7 @@ export class TradesService {
          .getOne();
       return {
          status: ResponseStatus.success,
-         trade: outputFilter(trade)[0] as TradeMinified,
+         trade: outputFilterTrades(trade)[0] as TradeMinified,
       };
    }
 

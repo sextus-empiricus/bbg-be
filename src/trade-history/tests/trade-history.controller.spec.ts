@@ -1,6 +1,5 @@
 import { ResponseStatus } from '../../types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Trade } from '../../trades/entities/trade.entity';
 import { TradeHistoryController } from '../trade-history.controller';
 import { TradeHistoryService } from '../trade-history.service';
 
@@ -15,10 +14,10 @@ describe('TradeHistoryController', () => {
             {
                provide: TradeHistoryService,
                useValue: {
-                  create: jest.fn(() => ({
+                  create: jest.fn((dto, tradeId) => ({
                      status: ResponseStatus.success,
                      createdTradeHistoryId: 'test1234',
-                     relatedTradeId: 'test1234',
+                     relatedTradeId: tradeId,
                   })),
                },
             },
@@ -36,7 +35,7 @@ describe('TradeHistoryController', () => {
       expect(service).toBeDefined();
    });
    describe('create', () => {
-      const mockTrade = { id: 'test1234' };
+      const mockTradeId = 'id1234';
       const mockDto = {
          soldAt: new Date().toDateString(),
          soldFor: 1,
@@ -45,18 +44,16 @@ describe('TradeHistoryController', () => {
          profitCash: 1,
       };
       it('should return `CreateTradeHistoryResponse` object', async () => {
-         expect(
-            await controller.create(mockTrade as Trade, mockDto),
-         ).toStrictEqual({
+         expect(await controller.create(mockTradeId, mockDto)).toStrictEqual({
             status: ResponseStatus.success,
             createdTradeHistoryId: expect.any(String),
-            relatedTradeId: mockTrade.id,
+            relatedTradeId: mockTradeId,
          });
       });
       it('should call `TradeHistoryService.create` with proper dto', async () => {
          const spy = jest.spyOn(service, 'create');
-         await controller.create(mockTrade as Trade, mockDto);
-         expect(spy).toBeCalledWith({ ...mockDto, trade: mockTrade as Trade });
+         await controller.create(mockTradeId, mockDto);
+         expect(spy).toBeCalledWith(mockDto, mockTradeId);
       });
    });
 });
