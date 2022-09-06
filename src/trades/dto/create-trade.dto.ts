@@ -4,6 +4,7 @@ import {
    IsPositive,
    IsString,
 } from 'class-validator';
+import { TradeHistory } from '../../trade-history/entities/trade-history.entity';
 
 export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsString()
@@ -23,4 +24,8 @@ export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsNumber()
    @IsPositive()
    amount: number;
+
+   /*For update-dto:*/
+   inExchange?: boolean;
+   tradeHistory?: TradeHistory;
 }

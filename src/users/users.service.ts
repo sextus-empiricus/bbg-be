@@ -1,30 +1,19 @@
-import { Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto';
-import { DataSource, InsertResult } from 'typeorm';
-import { User } from './entities/user.entity';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
    GetUserByIdResponse,
 } from '../types/users/users.responses';
+import { CreateUserDto } from './dto';
+import { DataSource, InsertResult } from 'typeorm';
+import { Inject, Injectable } from '@nestjs/common';
 import { ResponseStatus } from '../types/api/response';
-import { UserMinified } from '../types/users/user';
+import { User } from './entities/user.entity';
+import { outputFilterUsers } from './utils/outputFilter-users';
 
 @Injectable()
 export class UsersService {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
-
-   private outputFilter(users: User[]): UserMinified[] {
-      return users.map((el) => {
-         return {
-            id: el.id,
-            email: el.email,
-            password: el.password,
-            authToken: el.authToken,
-         };
-      });
-   }
 
    async create(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
       const insertResult: InsertResult = await this.dataSource
@@ -47,7 +36,7 @@ export class UsersService {
          .getMany();
       return {
          status: ResponseStatus.success,
-         usersList: this.outputFilter(usersList),
+         usersList: outputFilterUsers(usersList),
       };
    }
 
@@ -58,9 +47,10 @@ export class UsersService {
          .from(User, 'user')
          .where({ id })
          .getOne();
+
       return {
          status: ResponseStatus.success,
-         user: this.outputFilter([user])[0],
+         user: outputFilterUsers(user)[0],
       };
    }
 

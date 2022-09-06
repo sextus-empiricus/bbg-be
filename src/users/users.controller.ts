@@ -1,14 +1,14 @@
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dto';
+import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
    GetUserByIdResponse,
 } from '../types/users/users.responses';
+import { UsersService } from './users.service';
 import { ValidateNewUserPipe } from '../pipes/validate-new-user.pipe';
-import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -31,7 +31,7 @@ export class UsersController {
       return this.usersService.getById(id);
    }
 
-   @Delete(':id')
+   @Delete('/:id')
    deactivateById(
       @Param('id', DeactivateUserPipe) id: string,
    ): Promise<DeactivateUserByIdResponse> {

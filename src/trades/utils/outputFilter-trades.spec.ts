@@ -1,4 +1,4 @@
-import { outputFilter } from './outputFilter';
+import { outputFilterTrades } from './outputFilter-trades';
 import { Trade } from '../entities/trade.entity';
 
 const mockTrade = {
@@ -33,12 +33,12 @@ const mockTradeHistory = {
    createdAt: new Date(),
 };
 
-describe('outputFilter', () => {
-   it('should return null', () => {
-      expect(outputFilter(null)).toBe(null);
+describe('trades - outputFilter', () => {
+   it('should return [null]', () => {
+      expect(outputFilterTrades(null)).toStrictEqual([null]);
    });
    it('should return `TradeMinified` object in [] - object passed', () => {
-      expect(outputFilter(mockTrade as Trade)).toStrictEqual([
+      expect(outputFilterTrades(mockTrade as Trade)).toStrictEqual([
          {
             id: expect.any(String),
             amount: expect.any(Number),
@@ -55,7 +55,7 @@ describe('outputFilter', () => {
       ]);
    });
    it('should return `TradeMinified` object in [] - array passed', () => {
-      expect(outputFilter([mockTrade] as Trade[])).toStrictEqual([
+      expect(outputFilterTrades([mockTrade] as Trade[])).toStrictEqual([
          {
             id: expect.any(String),
             amount: expect.any(Number),
@@ -72,14 +72,14 @@ describe('outputFilter', () => {
       ]);
    });
    it('should minify `iconUrl` object', () => {
-      const result = outputFilter({
+      const result = outputFilterTrades({
          ...mockTrade,
          iconUrl: mockIconUrl,
       } as Trade);
       expect(result[0].iconUrl).toStrictEqual(expect.any(String));
    });
    it('should minify `tradeHistory` object', () => {
-      const result = outputFilter({
+      const result = outputFilterTrades({
          ...mockTrade,
          tradeHistory: mockTradeHistory,
       } as Trade);

@@ -1,8 +1,3 @@
-import { DataSource, InsertResult } from 'typeorm';
-import { Inject, Injectable } from '@nestjs/common';
-import { ResponseStatus } from '../types/api/response';
-import { Trade } from './entities/trade.entity';
-import { User } from '../users/entities/user.entity';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
@@ -10,34 +5,43 @@ import {
    GetTradeByIdResponse,
    UpdatedTradeResponse,
 } from '../types/trades/trade.responses';
-import { CreateTradeDtoInterface } from '../types/trades/dto/create-trade-dto.interface';
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { CreateTradeDto, UpdateTradeDto } from './dto';
+import { DataSource, InsertResult } from 'typeorm';
+import { ResponseStatus } from '../types/api/response';
+import { Trade } from './entities/trade.entity';
 import { TradeMinified } from '../types/trades/trade.interface';
-import { UpdateTradeDto } from './dto';
-import { outputFilter } from './utils/outputFilter';
-
-interface CreateTradeData extends CreateTradeDtoInterface {
-   user: User;
-}
+import { UsersService } from '../users/users.service';
+import { outputFilterTrades } from './utils/outputFilter-trades';
 
 @Injectable()
 export class TradesService {
-   constructor(@Inject(DataSource) private dataSource: DataSource) {}
+   constructor(
+      @Inject(DataSource) private dataSource: DataSource,
+      @Inject(UsersService) private usersService: UsersService,
+   ) {}
 
-   async create(dto: CreateTradeData): Promise<CreateTradeResponse> {
+   async create(
+      dto: CreateTradeDto,
+      userId: string,
+   ): Promise<CreateTradeResponse> {
+      const { user } = await this.usersService.getById(userId);
+      if (user === null) {
+         throw new ConflictException('No user found matches provided id.');
+      }
       const insertResult: InsertResult = await this.dataSource
          .createQueryBuilder()
          .insert()
          .into(Trade)
-         .values(dto)
+         .values({ ...dto, user })
          .execute();
       return {
          status: ResponseStatus.success,
          createdTradeId: insertResult.identifiers[0].id,
       };
    }
-
-   //💡DIFFERENT APPROACH EXAMPLE:
-   /*   async getAll(): Promise<GetAllTradesResponse> {
+   /*💡DIFFERENT APPROACH EXAMPLE:
+      async getAll(): Promise<GetAllTradesResponse> {
          const tradesList = await this.dataSource
             .getRepository(Trade)
             .createQueryBuilder('trade')
@@ -49,8 +53,7 @@ export class TradesService {
             tradesList: outputFilter(tradesList),
          };
       }
-      */
-
+   */
    async getAll(): Promise<GetAllTradesResponse> {
       const tradesList = await this.dataSource
          .createQueryBuilder()
@@ -61,7 +64,7 @@ export class TradesService {
          .getMany();
       return {
          status: ResponseStatus.success,
-         tradesList: outputFilter(tradesList),
+         tradesList: outputFilterTrades(tradesList),
       };
    }
 
@@ -74,10 +77,9 @@ export class TradesService {
          .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .where('trade.id = :id', { id })
          .getOne();
-
       return {
          status: ResponseStatus.success,
-         trade: outputFilter(trade)[0] as TradeMinified,
+         trade: outputFilterTrades(trade)[0] as TradeMinified,
       };
    }
 
