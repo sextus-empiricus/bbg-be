@@ -12,7 +12,7 @@ import { DataSource } from 'typeorm';
 export class DeactivateUserPipe implements PipeTransform {
    constructor(@Inject(DataSource) private dataSource: DataSource) {}
 
-   async transform(value: string, metadata: ArgumentMetadata): Promise<void> {
+   async transform(value: string, metadata: ArgumentMetadata): Promise<string> {
       /*ℹCould use UsersService to get a user, but we are looking for `isActive` 
       and the service returns filterd data.*/
       const targetUser = await this.dataSource
@@ -27,5 +27,6 @@ export class DeactivateUserPipe implements PipeTransform {
       } else if (targetUser.isActive === false) {
          throw new ConflictException(`User already deactivated.`);
       }
+      return value;
    }
 }
