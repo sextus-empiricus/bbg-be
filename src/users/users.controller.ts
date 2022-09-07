@@ -1,12 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
-import { CreateUserDto } from './dto';
-import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
    GetUserByIdResponse,
 } from '../types/users/users.responses';
+import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { CreateUserDto } from './dto';
+import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
 import { UsersService } from './users.service';
 import { ValidateNewUserPipe } from '../pipes/validate-new-user.pipe';
 
