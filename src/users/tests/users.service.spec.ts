@@ -58,6 +58,8 @@ describe('UsersService', () => {
                   //update:
                   update: jest.fn().mockReturnThis(),
                   set: jest.fn().mockReturnThis(),
+                  //delete:
+                  delete: jest.fn().mockReturnThis()
                },
             },
          ],
@@ -214,6 +216,20 @@ describe('UsersService', () => {
       it('should call dataSource.where with provided id', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
          await service.deactivateById(mockId);
+         expect(spy).toBeCalledWith({ id: mockId });
+      });
+   });
+   describe('removeById', () => {
+      it('should call ds.qbl.from with `User` entity ', async () => {
+         const mockId = 'id1234';
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from')
+         await service.removeById(mockId);
+         expect(spy).toBeCalledWith(User)
+      });
+      it('should call ds.qbl.where with provided id', async () => {
+         const mockId = 'id1234';
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where')
+         await service.removeById(mockId);
          expect(spy).toBeCalledWith({ id: mockId });
       });
    });
