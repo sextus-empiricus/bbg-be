@@ -26,8 +26,8 @@ export class AttachIconToTradePipe implements PipeTransform {
       const { currency: symbol } = createTradeDto;
       let iconUrl = await this.iconUrlService.getBySymbol(symbol);
       if (iconUrl === null) {
+         //1. fech external API for a currnecy icon url;
          try {
-            //1. fech external API for a currnecy icon url;
             const cmcRes = await this.httpService
                .get(`${getIconUrl}?symbol=${symbol}`, {
                   headers: authHeader,
@@ -43,7 +43,6 @@ export class AttachIconToTradePipe implements PipeTransform {
             iconUrl = await this.iconUrlService.getBySymbol(symbol);
          } catch (e) {
             //3. if it's failed - do nth. We want to let a user add his trade anyway.
-            console.log(e.code);
          }
       }
       return { ...createTradeDto, iconUrl };
