@@ -26,8 +26,8 @@ export class AttachIconToTradePipe implements PipeTransform {
       const { currency: symbol } = createTradeDto;
       let iconUrl = await this.iconUrlService.getBySymbol(symbol);
       if (iconUrl === null) {
+         //1. fech external API for a currnecy icon url;
          try {
-            //1. fech external API for a currnecy icon url;
             const cmcRes = await this.httpService
                .get(`${getIconUrl}?symbol=${symbol}`, {
                   headers: authHeader,

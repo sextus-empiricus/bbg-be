@@ -9,7 +9,7 @@ import { getDataSourceToken } from '@nestjs/typeorm';
 describe('ValidateNewUserPipe', () => {
    let pipe: ValidateNewUserPipe;
    let dataSource: DataSource;
-   const mockMetaData = {} as ArgumentMetadata;
+   const mockMetadata = {} as ArgumentMetadata;
    const mockDto = {
       email: 'test@test.test',
       password: 'test1234',
@@ -48,37 +48,37 @@ describe('ValidateNewUserPipe', () => {
    describe('successful calls', () => {
       it('should create queryBuilder once', async () => {
          const spy = jest.spyOn(dataSource, 'createQueryBuilder');
-         await pipe.transform(mockDto, mockMetaData);
+         await pipe.transform(mockDto, mockMetadata);
          expect(spy).toBeCalledTimes(1);
       });
       it('should call ds.cqb.select with proper selection', async () => {
          const mockSelection = 'user';
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'select');
-         await pipe.transform(mockDto, mockMetaData);
+         await pipe.transform(mockDto, mockMetadata);
          expect(spy).toBeCalledWith(mockSelection);
       });
       it('should call ds.cqb.from with proper entity and aliasName', async () => {
          const mockAliasName = 'user';
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
-         await pipe.transform(mockDto, mockMetaData);
+         await pipe.transform(mockDto, mockMetadata);
          expect(spy).toBeCalledWith(User, mockAliasName);
       });
       it('should call ds.cqb.where with proper query', async () => {
          const { email } = mockDto;
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
-         await pipe.transform(mockDto, mockMetaData);
+         await pipe.transform(mockDto, mockMetadata);
          expect(spy).toBeCalledWith({ email });
       });
       it('should return dto with hashed password', async () => {
-         const { password } = await pipe.transform(mockDto, mockMetaData);
+         const { password } = await pipe.transform(mockDto, mockMetadata);
          expect(await compare(mockDto.password, password)).toBeTruthy();
       });
    });
    describe('unsuccessful calls', () => {
       it('email in use - ConflictException expected', async () => {
-         await pipe.transform(mockDto, mockMetaData); //ommit the first call;
+         await pipe.transform(mockDto, mockMetadata); //ommit the first call;
          await expect(async () => {
-            await pipe.transform(mockDto, mockMetaData);
+            await pipe.transform(mockDto, mockMetadata);
          }).rejects.toThrow(ConflictException);
       });
    });
