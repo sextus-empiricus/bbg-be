@@ -12,6 +12,7 @@ import { TradesModule } from '../src/trades/trades.module';
 import { TradesService } from '../src/trades/trades.service';
 import { UsersService } from '../src/users/users.service';
 import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
+import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
 
 describe('TradesController (e2e)', () => {
    let app: INestApplication;
@@ -64,6 +65,8 @@ describe('TradesController (e2e)', () => {
             getBySymbol: jest.fn(),
          })
          .overridePipe(ValidateNewUserPipe)
+         .useValue({})
+         .overridePipe(DeactivateUserPipe)
          .useValue({})
          .compile();
 

@@ -43,7 +43,6 @@ export class AttachIconToTradePipe implements PipeTransform {
             iconUrl = await this.iconUrlService.getBySymbol(symbol);
          } catch (e) {
             //3. if it's failed - do nth. We want to let a user add his trade anyway.
-            console.log(e.code);
          }
       }
       return { ...createTradeDto, iconUrl };
