@@ -21,29 +21,40 @@ describe('UsersService', () => {
                   insert: jest.fn().mockReturnThis(),
                   into: jest.fn().mockReturnThis(),
                   values: jest.fn().mockReturnThis(),
-                  execute: jest.fn((dto) => ({
+                  execute: jest.fn().mockResolvedValue({
                      identifiers: [{ id: 'test1234' }],
-                  })),
+                  }),
                   //select:
                   select: jest.fn().mockReturnThis(),
                   from: jest.fn().mockReturnThis(),
                   where: jest.fn().mockReturnThis(),
-                  getOne: jest.fn((id) => ({
+                  getOne: jest.fn().mockResolvedValue({
                      id: 'test1234',
                      email: 'test@test.test',
                      password: 'test1234',
                      authToken: 'test1234',
-                  })),
-                  getMany: jest.fn((symbol) => {
-                     return [
+                  }),
+                  getMany: jest
+                     .fn()
+                     .mockResolvedValueOnce([
                         {
                            id: 'test1234',
                            email: 'test1234',
                            password: 'test1234',
                            authToken: 'test1234',
                         },
-                     ];
-                  }),
+                     ])
+                     .mockResolvedValueOnce([
+                        {
+                           id: 'test1234',
+                           email: 'test1234',
+                           password: 'test1234',
+                           authToken: 'test1234',
+                           createdAt: new Date(),
+                           updatedAt: new Date(),
+                           isActive: false,
+                        } as User,
+                     ]),
                   //update:
                   update: jest.fn().mockReturnThis(),
                   set: jest.fn().mockReturnThis(),
@@ -115,6 +126,41 @@ describe('UsersService', () => {
          expect(spy).toBeCalledWith(User, 'user');
       });
    });
+   describe('getAllDisabled', () => {
+      it('should return `Users[]` object', async () => {
+         const expectedResult = [
+            {
+               id: expect.any(String),
+               email: expect.any(String),
+               password: expect.any(String),
+               authToken: expect.any(String),
+               createdAt: expect.any(Date),
+               updatedAt: expect.any(Date),
+               isActive: false,
+            },
+         ];
+         await service.getAllDisabled(); //ommit first call;
+         expect(await service.getAllDisabled()).toStrictEqual(expectedResult);
+      });
+      it('should call a dataSource.select which a proper selection', async () => {
+         await service.getAllDisabled(); //ommit first call;
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'select');
+         await service.getAllDisabled();
+         expect(spy).toBeCalledWith('user');
+      });
+      it('should call a dataSource.from which a User entity', async () => {
+         await service.getAllDisabled(); //ommit first call;
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
+         await service.getAllDisabled();
+         expect(spy).toBeCalledWith(User, 'user');
+      });
+      it('should call a dataSource.where which { isActive: false }', async () => {
+         await service.getAllDisabled(); //ommit first call;
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
+         await service.getAllDisabled();
+         expect(spy).toBeCalledWith({ isActive: false });
+      });
+   });
    describe('getById', () => {
       const mockId = 'test1234';
       it('should return `GetUserByIdResponse` object', async () => {
@@ -141,7 +187,7 @@ describe('UsersService', () => {
       it('should call a dataSource.where which a provided id', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
          await service.getById(mockId);
-         expect(spy).toBeCalledWith({ id: mockId });
+         expect(spy).toBeCalledWith({ id: mockId, isActive: true });
       });
    });
    describe('deactivateById', () => {
@@ -152,19 +198,22 @@ describe('UsersService', () => {
             deactivatedUserId: mockId,
          });
       });
-      it('should call dataSource.update with `User` entity', async() => {
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'update')
-         await service.deactivateById(mockId)
-         expect(spy).toBeCalledWith(User)
+      it('should call dataSource.update with `User` entity', async () => {
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'update');
+         await service.deactivateById(mockId);
+         expect(spy).toBeCalledWith(User);
       });
-      it('should call dataSource.set with { isActive: false } object', async() => {
-         const spy = jest.spyOn(dataSource.createQueryBuilder().update(), 'set')
-         await service.deactivateById(mockId)
-         expect(spy).toBeCalledWith({ isActive: false })
+      it('should call dataSource.set with { isActive: false } object', async () => {
+         const spy = jest.spyOn(
+            dataSource.createQueryBuilder().update(),
+            'set',
+         );
+         await service.deactivateById(mockId);
+         expect(spy).toBeCalledWith({ isActive: false });
       });
-      it('should call dataSource.where with provided id', async() => {
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where')
-         await service.deactivateById(mockId)
+      it('should call dataSource.where with provided id', async () => {
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
+         await service.deactivateById(mockId);
          expect(spy).toBeCalledWith({ id: mockId });
       });
    });
