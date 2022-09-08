@@ -16,7 +16,7 @@ export class CronService {
       console.log(`${nowTime}: CRON \`deleteDeactivatedUsers\` - RUNNED`);
       const deactivatedUsers: User[] = await this.usersService.getAllDisabled();
       deactivatedUsers.map(async (el) => {
-         let updatedAt = new Date(Date.parse(el.updatedAt.toString()));
+         const updatedAt = new Date(Date.parse(el.updatedAt.toString()));
          const oneMinute = 1000 * 60;
          if (N(now) - N(updatedAt) > oneMinute) {
             console.log(`${nowTime}: ${el.id} - user deleted from data base`);
