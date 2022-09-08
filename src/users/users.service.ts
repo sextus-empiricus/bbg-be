@@ -33,6 +33,7 @@ export class UsersService {
          .createQueryBuilder()
          .select('user')
          .from(User, 'user')
+         .where({ isActive: true })
          .getMany();
       return {
          status: ResponseStatus.success,
@@ -40,12 +41,21 @@ export class UsersService {
       };
    }
 
+   async getAllDisabled(): Promise<User[]> {
+      return await this.dataSource
+         .createQueryBuilder()
+         .select('user')
+         .from(User, 'user')
+         .where({ isActive: false })
+         .getMany();
+   }
+
    async getById(id: string): Promise<GetUserByIdResponse> {
       const user = await this.dataSource
          .createQueryBuilder()
          .select('user')
          .from(User, 'user')
-         .where({ id })
+         .where({ id, isActive: true })
          .getOne();
 
       return {
@@ -65,5 +75,14 @@ export class UsersService {
          status: ResponseStatus.success,
          deactivatedUserId: id,
       };
+   }
+
+   async removeById(id: string): Promise<void> {
+      await this.dataSource
+         .createQueryBuilder()
+         .delete()
+         .from(User)
+         .where({ id })
+         .execute();
    }
 }

@@ -14,24 +14,4 @@ export class TradeHistoryController {
    ): Promise<CreateTradeHistoryResponse> {
       return await this.tradeHistoryService.create(addTradeHistoryDto, tradeId);
    }
-
-   // @Get()
-   // findAll() {
-   //   return this.tradeHistoryService.findAll();
-   // }
-   //
-   // @Get(':id')
-   // findOne(@Param('id') id: string) {
-   //   return this.tradeHistoryService.findOne(+id);
-   // }
-   //
-   // @Patch(':id')
-   // update(@Param('id') id: string, @Body() updateTradeHistoryDto: UpdateTradeHistoryDto) {
-   //   return this.tradeHistoryService.update(+id, updateTradeHistoryDto);
-   // }
-   //
-   // @Delete(':id')
-   // remove(@Param('id') id: string) {
-   //   return this.tradeHistoryService.remove(+id);
-   // }
 }

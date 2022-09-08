@@ -1,4 +1,10 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, HttpStatus } from '@nestjs/common';
+import {
+   ArgumentsHost,
+   Catch,
+   ExceptionFilter,
+   HttpException,
+   HttpStatus,
+} from '@nestjs/common';
 import { Request, Response } from 'express';
 
 @Catch()
@@ -19,18 +25,14 @@ class GlobalExceptionFilter implements ExceptionFilter {
 
       console.log(exception);
 
-      response
-         .status(status)
-         .json({
-            status: 'failed',
-            statusCode: status,
-            message,
-            timestamp: new Date().toISOString(),
-            path: request.url,
-         });
+      response.status(status).json({
+         status: 'failed',
+         statusCode: status,
+         message,
+         timestamp: new Date().toISOString(),
+         path: request.url,
+      });
    }
 }
 
-export {
-   GlobalExceptionFilter,
-};
+export { GlobalExceptionFilter };

@@ -1,54 +1,26 @@
 import { Cron, CronExpression } from '@nestjs/schedule';
-import { DataSource } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
-import { TradeHistory } from '../trade-history/entities/trade-history.entity';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { convertToNumber as N } from '../utils/convert-data-helpers';
 
 @Injectable()
 export class CronService {
-   constructor(@Inject(DataSource) private dataSource: DataSource) {}
+   constructor(@Inject(UsersService) private usersService: UsersService) {}
 
-   /*This fn() removes disactivated users every day.
-   💡TODO Make it better! Check if user.!isActive and if from now to user.updatedAt pass 7 days.
-   */
-   @Cron(CronExpression.EVERY_DAY_AT_1AM)
-   async deleteDeactivatedUsers() {
-      const deactivatedUsers: User[] = await this.dataSource
-         .createQueryBuilder()
-         .select('user')
-         .from(User, 'user')
-         .where({ isActive: false })
-         .getMany();
-
-      deactivatedUsers.map(async (el) => {
-         await this.dataSource
-            .createQueryBuilder()
-            .delete()
-            .from(User, 'user')
-            .where({ id: el.id })
-            .execute();
-      });
-   }
-
-   /*This fn() cleans database from unusefull `TradeHistory` records which are no realted to any `Trade` record if exists..*/
+   /**ℹThis fn() removes every day disactivated users if after its deactivating passed one week.*/
    @Cron(CronExpression.EVERY_10_SECONDS)
-   async deleteUnrelatedTradeHistoryRecords() {
-      const tradeHistoryRecords = await this.dataSource
-         .createQueryBuilder()
-         .select('tradeHistory')
-         .from(TradeHistory, 'tradeHistory')
-         .leftJoinAndSelect('tradeHistory.trade', 'trade')
-         //🤔 can't achieve tradeHistory.trade. maybe because trade is a dominant side of rel;
-         .getMany();
-
-      tradeHistoryRecords.map(async (el) => {
-         if (el.trade === null) {
-            await this.dataSource
-               .createQueryBuilder()
-               .delete()
-               .from(TradeHistory, 'tradeHistory')
-               .where({ id: el.id })
-               .execute();
+   async deleteDeactivatedUsers() {
+      const now = new Date();
+      const nowTime = now.toLocaleTimeString();
+      console.log(`${nowTime}: CRON \`deleteDeactivatedUsers\` - RUNNED`);
+      const deactivatedUsers: User[] = await this.usersService.getAllDisabled();
+      deactivatedUsers.map(async (el) => {
+         const updatedAt = new Date(Date.parse(el.updatedAt.toString()));
+         const oneMinute = 1000 * 60;
+         if (N(now) - N(updatedAt) > oneMinute) {
+            console.log(`${nowTime}: ${el.id} - user deleted from data base`);
+            await this.usersService.removeById(el.id);
          }
       });
    }
