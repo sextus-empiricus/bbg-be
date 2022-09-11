@@ -1,17 +1,17 @@
+import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { DataSource, InsertResult } from 'typeorm';
+import { ResponseStatus } from '../types/api';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
    GetAllTradesResponse,
    GetTradeByIdResponse,
+   TradeMinified,
    UpdatedTradeResponse,
-} from '../types/trades/trade.responses';
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
-import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { DataSource, InsertResult } from 'typeorm';
-import { ResponseStatus } from '../types/api/response';
-import { Trade } from './entities/trade.entity';
-import { TradeMinified } from '../types/trades/trade.interface';
+} from '../types/trades';
 import { UsersService } from '../users/users.service';
+import { CreateTradeDto, UpdateTradeDto } from './dto';
+import { Trade } from './entities';
 import { outputFilterTrades } from './utils/outputFilter-trades';
 
 @Injectable()
@@ -40,6 +40,7 @@ export class TradesService {
          createdTradeId: insertResult.identifiers[0].id,
       };
    }
+
    /*💡DIFFERENT APPROACH EXAMPLE:
       async getAll(): Promise<GetAllTradesResponse> {
          const tradesList = await this.dataSource

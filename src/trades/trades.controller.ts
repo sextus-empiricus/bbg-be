@@ -7,24 +7,23 @@ import {
    Patch,
    Post,
 } from '@nestjs/common';
-import { CreateTradeDto } from './dto';
-import { TradesService } from './trades.service';
+import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
    GetAllTradesResponse,
    GetTradeByIdResponse,
    UpdatedTradeResponse,
-} from '../types/trades/trade.responses';
-import { UpdateTradeDto } from './dto';
-import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
+} from '../types/trades';
+import { CreateTradeDto, UpdateTradeDto } from './dto';
+import { TradesService } from './trades.service';
 
 @Controller('trades')
 export class TradesController {
    constructor(private readonly tradesService: TradesService) {}
 
-   /*💡This route will be changed after auth logic implement. User object will be assigned by `@UserObject()` decorator
-   by user's id passed in token. Then 'user/userId' path won't be needed anymore.*/
+   /*💡This route will be changed after auth logic implement. User object will be assigned by `@UserObject()`
+    * decorator by user's id passed in token. Then 'user/userId' path won't be needed anymore.*/
    @Post('/user/:userId')
    create(
       @Body(AttachIconToTradePipe) createTradeDto: CreateTradeDto,

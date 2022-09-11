@@ -1,10 +1,10 @@
+import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
 import { ResponseStatus } from '../../types/api/response';
-import { Test, TestingModule } from '@nestjs/testing';
-import { Trade } from '../entities/trade.entity';
-import { TradesService } from '../trades.service';
 import { User } from '../../users/entities/user.entity';
 import { UsersService } from '../../users/users.service';
+import { Trade } from '../entities/trade.entity';
+import { TradesService } from '../trades.service';
 
 describe('TradesService', () => {
    let service: TradesService;
@@ -67,7 +67,7 @@ describe('TradesService', () => {
                useValue: {
                   getById: jest.fn().mockResolvedValue({
                      status: ResponseStatus.success,
-                     user: mockUser
+                     user: mockUser,
                   }),
                },
             },

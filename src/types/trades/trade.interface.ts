@@ -1,5 +1,5 @@
-import { TradeHistoryInterfaceMinfied } from '../trade-history/trade-history.interface';
 import { IconUrlInterfaceMinified } from '../icon-url/icon-url.interface';
+import { TradeHistoryInterfaceMinfied } from '../trade-history/trade-history.interface';
 
 export interface TradeInterface {
    id: string;

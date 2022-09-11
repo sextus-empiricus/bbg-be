@@ -1,9 +1,9 @@
-import { ArgumentMetadata } from '@nestjs/common';
-import { AttachIconToTradePipe } from '../attach-icon-to-trade.pipe';
 import { HttpService } from '@nestjs/axios';
+import { ArgumentMetadata } from '@nestjs/common';
+import { Test, TestingModule } from '@nestjs/testing';
 import { IconUrl } from '../../icon-url/entities/icon-url.entity';
 import { IconUrlService } from '../../icon-url/icon-url.service';
-import { Test, TestingModule } from '@nestjs/testing';
+import { AttachIconToTradePipe } from '../attach-icon-to-trade.pipe';
 
 describe('AttachIconToTradePipe', () => {
    let pipe: AttachIconToTradePipe;

@@ -1,10 +1,10 @@
-import { CreateTradeHistoryDto } from './dto/create-trade-history.dto';
-import { CreateTradeHistoryResponse } from '../types/trade-history/trade-history.responses';
-import { DataSource } from 'typeorm';
 import { Inject, Injectable } from '@nestjs/common';
-import { ResponseStatus } from '../types/api/response';
-import { TradeHistory } from './entities/trade-history.entity';
+import { DataSource } from 'typeorm';
 import { TradesService } from '../trades/trades.service';
+import { ResponseStatus } from '../types/api';
+import { CreateTradeHistoryResponse } from '../types/trade-history';
+import { CreateTradeHistoryDto } from './dto';
+import { TradeHistory } from './entities';
 
 @Injectable()
 export class TradeHistoryService {
@@ -17,7 +17,6 @@ export class TradeHistoryService {
       addTradeHistoryDto: CreateTradeHistoryDto,
       tradeId: string,
    ): Promise<CreateTradeHistoryResponse> {
-
       const { id: tradeHistoryId } = (
          await this.dataSource
             .createQueryBuilder()

@@ -1,8 +1,8 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { IconUrl } from '../entities/icon-url.entity';
 import { IconUrlService } from '../icon-url.service';
-import { Test, TestingModule } from '@nestjs/testing';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('IconUrlService', () => {
    let service: IconUrlService;

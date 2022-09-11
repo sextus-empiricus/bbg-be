@@ -1,18 +1,18 @@
-import * as request from 'supertest';
 import {
    ConflictException,
    INestApplication,
    ValidationPipe,
 } from '@nestjs/common';
-import { IconUrlService } from '../src/icon-url/icon-url.service';
-import { ResponseStatus } from '../src/types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
-import { TradeMinified } from '../src/types/trades/trade.interface';
+import * as request from 'supertest';
+import { IconUrlService } from '../src/icon-url/icon-url.service';
+import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
+import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
 import { TradesModule } from '../src/trades/trades.module';
 import { TradesService } from '../src/trades/trades.service';
+import { ResponseStatus } from '../src/types/api/response';
+import { TradeMinified } from '../src/types/trades/trade.interface';
 import { UsersService } from '../src/users/users.service';
-import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
-import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
 
 describe('TradesController (e2e)', () => {
    let app: INestApplication;

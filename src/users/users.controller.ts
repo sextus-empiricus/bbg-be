@@ -1,14 +1,14 @@
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
+import { ValidateNewUserPipe } from '../pipes/validate-new-user.pipe';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
-   GetUserByIdResponse,
-} from '../types/users/users.responses';
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+   GetUserByResponse,
+} from '../types/users';
 import { CreateUserDto } from './dto';
-import { DeactivateUserPipe } from '../pipes/deactivate-user.pipe';
 import { UsersService } from './users.service';
-import { ValidateNewUserPipe } from '../pipes/validate-new-user.pipe';
 
 @Controller('users')
 export class UsersController {
@@ -27,7 +27,7 @@ export class UsersController {
    }
 
    @Get('/:id')
-   getById(@Param('id') id: string): Promise<GetUserByIdResponse> {
+   getById(@Param('id') id: string): Promise<GetUserByResponse> {
       return this.usersService.getById(id);
    }
 

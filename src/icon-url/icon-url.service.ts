@@ -1,8 +1,8 @@
-import { CreateIconUrlDto } from '../types/icon-url/dto/create-icon-url.dto';
-import { DataSource, InsertResult } from 'typeorm';
-import { IconUrl } from './entities/icon-url.entity';
-import { IconUrlInterface } from '../types/icon-url/icon-url.interface';
 import { Inject, Injectable } from '@nestjs/common';
+import { DataSource, InsertResult } from 'typeorm';
+import { CreateIconUrlDto } from '../types/icon-url';
+import { IconUrlInterface } from '../types/icon-url';
+import { IconUrl } from './entities';
 
 @Injectable()
 export class IconUrlService {

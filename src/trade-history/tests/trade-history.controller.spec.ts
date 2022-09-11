@@ -1,5 +1,5 @@
-import { ResponseStatus } from '../../types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
+import { ResponseStatus } from '../../types/api/response';
 import { TradeHistoryController } from '../trade-history.controller';
 import { TradeHistoryService } from '../trade-history.service';
 

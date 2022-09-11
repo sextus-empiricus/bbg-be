@@ -1,9 +1,9 @@
+import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { ResponseStatus } from '../../types/api/response';
-import { Test, TestingModule } from '@nestjs/testing';
 import { User } from '../entities/user.entity';
 import { UsersService } from '../users.service';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('UsersService', () => {
    let service: UsersService;
@@ -59,7 +59,7 @@ describe('UsersService', () => {
                   update: jest.fn().mockReturnThis(),
                   set: jest.fn().mockReturnThis(),
                   //delete:
-                  delete: jest.fn().mockReturnThis()
+                  delete: jest.fn().mockReturnThis(),
                },
             },
          ],
@@ -222,13 +222,13 @@ describe('UsersService', () => {
    describe('removeById', () => {
       it('should call ds.qbl.from with `User` entity ', async () => {
          const mockId = 'id1234';
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from')
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
          await service.removeById(mockId);
-         expect(spy).toBeCalledWith(User)
+         expect(spy).toBeCalledWith(User);
       });
       it('should call ds.qbl.where with provided id', async () => {
          const mockId = 'id1234';
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where')
+         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
          await service.removeById(mockId);
          expect(spy).toBeCalledWith({ id: mockId });
       });

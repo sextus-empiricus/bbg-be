@@ -1,77 +1,54 @@
 import { ArgumentMetadata, ConflictException } from '@nestjs/common';
-import { DataSource } from 'typeorm';
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../users/entities';
+import { UsersService } from '../../users/users.service';
 import { ValidateNewUserPipe } from '../validate-new-user.pipe';
-import { compare } from 'bcrypt';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('ValidateNewUserPipe', () => {
    let pipe: ValidateNewUserPipe;
-   let dataSource: DataSource;
+   let usersService: UsersService;
    const mockMetadata = {} as ArgumentMetadata;
    const mockDto = {
       email: 'test@test.test',
       password: 'test1234',
    };
-
+   const mockUser = {} as User;
    beforeEach(async () => {
       const module: TestingModule = await Test.createTestingModule({
          providers: [
             {
-               provide: getDataSourceToken(),
+               provide: UsersService,
                useValue: {
-                  createQueryBuilder: jest.fn().mockReturnThis(),
-                  select: jest.fn().mockReturnThis(),
-                  from: jest.fn().mockReturnThis(),
-                  where: jest.fn().mockReturnThis(),
-                  getOne: jest
+                  getByEmail: jest
                      .fn()
-                     .mockReturnValueOnce(null)
-                     .mockResolvedValueOnce({} as User),
+                     .mockResolvedValueOnce(null)
+                     .mockResolvedValueOnce(mockUser),
                },
             },
          ],
       }).compile();
 
-      dataSource = module.get<DataSource>(DataSource);
-      pipe = new ValidateNewUserPipe(dataSource);
+      usersService = module.get<UsersService>(UsersService);
+      pipe = new ValidateNewUserPipe(usersService);
    });
 
    it('ValidateNewUserPipe should be defined', () => {
       expect(pipe).toBeDefined();
    });
-   it('DataSource should be defined', () => {
-      expect(dataSource).toBeDefined();
+   it('UsersService should be defined', () => {
+      expect(usersService).toBeDefined();
    });
 
    describe('successful calls', () => {
-      it('should create queryBuilder once', async () => {
-         const spy = jest.spyOn(dataSource, 'createQueryBuilder');
-         await pipe.transform(mockDto, mockMetadata);
-         expect(spy).toBeCalledTimes(1);
+      it('should return back input data', async () => {
+         expect(await pipe.transform(mockDto, mockMetadata)).toStrictEqual(
+            mockDto,
+         );
       });
-      it('should call ds.cqb.select with proper selection', async () => {
-         const mockSelection = 'user';
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'select');
+      it('should call `usersService.getByEmail` with proper data', async () => {
+         const spy = jest.spyOn(usersService, 'getByEmail');
          await pipe.transform(mockDto, mockMetadata);
-         expect(spy).toBeCalledWith(mockSelection);
-      });
-      it('should call ds.cqb.from with proper entity and aliasName', async () => {
-         const mockAliasName = 'user';
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
-         await pipe.transform(mockDto, mockMetadata);
-         expect(spy).toBeCalledWith(User, mockAliasName);
-      });
-      it('should call ds.cqb.where with proper query', async () => {
-         const { email } = mockDto;
-         const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
-         await pipe.transform(mockDto, mockMetadata);
-         expect(spy).toBeCalledWith({ email });
-      });
-      it('should return dto with hashed password', async () => {
-         const { password } = await pipe.transform(mockDto, mockMetadata);
-         expect(await compare(mockDto.password, password)).toBeTruthy();
+         expect(spy).toBeCalledWith(mockDto.email);
       });
    });
    describe('unsuccessful calls', () => {

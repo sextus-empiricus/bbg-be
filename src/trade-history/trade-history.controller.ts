@@ -1,6 +1,6 @@
-import { Controller, Post, Body, Param } from '@nestjs/common';
-import { CreateTradeHistoryDto } from './dto/create-trade-history.dto';
-import { CreateTradeHistoryResponse } from '../types/trade-history/trade-history.responses';
+import { Body, Controller, Param, Post } from '@nestjs/common';
+import { CreateTradeHistoryResponse } from '../types/trade-history';
+import { CreateTradeHistoryDto } from './dto';
 import { TradeHistoryService } from './trade-history.service';
 
 @Controller('trade-history')
