@@ -1,11 +1,11 @@
-import { DataSource } from 'typeorm';
 import { HttpService } from '@nestjs/axios';
+import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { IconUrlService } from '../../icon-url/icon-url.service';
 import { ResponseStatus } from '../../types/api/response';
-import { Test, TestingModule } from '@nestjs/testing';
 import { TradesController } from '../trades.controller';
 import { TradesService } from '../trades.service';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('TradesController', () => {
    let controller: TradesController;
@@ -108,7 +108,7 @@ describe('TradesController', () => {
          price: 1,
          amount: 1,
       };
-      const mockUserId = 'user1'
+      const mockUserId = 'user1';
 
       it('should return `CreateTradeResponse` object', async () => {
          expect(await controller.create(mockDto, mockUserId)).toStrictEqual({

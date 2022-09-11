@@ -1,5 +1,5 @@
-import { Trade } from '../entities/trade.entity';
 import { TradeMinified } from '../../types/trades/trade.interface';
+import { Trade } from '../entities/trade.entity';
 
 /*ℹThis filter cleans dry db fetched data and removes all unusefull rows for a client (as `createdAt` etc.).
   Function always returns TradeMinified[].

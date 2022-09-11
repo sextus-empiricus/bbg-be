@@ -1,6 +1,6 @@
-import { CronService } from './cron.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from '../users/users.service';
+import { CronService } from './cron.service';
 
 describe('CronService', () => {
    let service: CronService;

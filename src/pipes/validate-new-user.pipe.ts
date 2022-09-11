@@ -1,32 +1,26 @@
-import { ArgumentMetadata, ConflictException, Inject, Injectable, PipeTransform } from '@nestjs/common';
-import { hash } from 'bcrypt';
-import { DataSource } from 'typeorm';
+import {
+   ArgumentMetadata,
+   ConflictException,
+   Injectable,
+   PipeTransform,
+} from '@nestjs/common';
 import { CreateUserDto } from '../users/dto';
-import { User } from '../users/entities';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class ValidateNewUserPipe implements PipeTransform {
-   constructor(@Inject(DataSource) private readonly dataSource: DataSource) {
-   }
+   constructor(private usersService: UsersService) {}
 
    async transform(
-      value: any,
+      value: CreateUserDto,
       metadata: ArgumentMetadata,
    ): Promise<CreateUserDto> {
-      //TODO - it should use UsersService!
-      const targetUser = await this.dataSource
-         .createQueryBuilder()
-         .select('user')
-         .from(User, 'user')
-         .where({ email: value.email })
-         .getOne();
+      const targetUser = await this.usersService.getByEmail(value.email);
+
       if (targetUser) {
          throw new ConflictException('Provided email address is already used.');
-      } else {
-         return {
-            email: value.email,
-            password: await hash(value.password, 12),
-         };
       }
+
+      return value;
    }
 }

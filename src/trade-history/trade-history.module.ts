@@ -8,5 +8,4 @@ import { TradeHistoryService } from './trade-history.service';
    controllers: [TradeHistoryController],
    providers: [TradeHistoryService],
 })
-export class TradeHistoryModule {
-}
+export class TradeHistoryModule {}

@@ -6,7 +6,7 @@ export interface CreateTradeResponse extends SuccessResponse {
 }
 
 export interface GetAllTradesResponse extends SuccessResponse {
-   tradesList: TradeMinified[] //| TradeMinified;
+   tradesList: TradeMinified[]; //| TradeMinified;
 }
 
 export interface GetTradeByIdResponse extends SuccessResponse {

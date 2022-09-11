@@ -1,16 +1,16 @@
-import * as request from 'supertest';
 import {
    ConflictException,
    INestApplication,
    ValidationPipe,
 } from '@nestjs/common';
-import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
-import { ResponseStatus } from '../src/types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
+import * as request from 'supertest';
+import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
+import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
+import { ResponseStatus } from '../src/types/api/response';
 import { User } from '../src/users/entities/user.entity';
 import { UsersModule } from '../src/users/users.module';
 import { UsersService } from '../src/users/users.service';
-import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
 
 describe('UsersController (e2e)', () => {
    let app: INestApplication;
@@ -174,7 +174,7 @@ describe('UsersController (e2e)', () => {
          return request(app.getHttpServer())
             .delete('/users/notExistingUser')
             .expect('Content-Type', /json/)
-            .expect(409)
+            .expect(409);
       });
    });
 });

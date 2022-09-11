@@ -17,7 +17,6 @@ export class TradeHistoryService {
       addTradeHistoryDto: CreateTradeHistoryDto,
       tradeId: string,
    ): Promise<CreateTradeHistoryResponse> {
-
       const { id: tradeHistoryId } = (
          await this.dataSource
             .createQueryBuilder()

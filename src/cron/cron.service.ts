@@ -8,18 +8,23 @@ const { development } = appConfig.app;
 
 @Injectable()
 export class CronService {
-   constructor(@Inject(UsersService) private usersService: UsersService) {
-   }
+   constructor(@Inject(UsersService) private usersService: UsersService) {}
 
-   /**ℹThis fn() removes every day disactivated users if after its deactivating passed one week.
-    * In development environment it runs every minute and delete if passed one minute.*/
-   @Cron(development ? CronExpression.EVERY_MINUTE : CronExpression.EVERY_DAY_AT_1AM)
+   /**Fn() removes deactivated users if after its deactivating event passed one week.
+    * In development environment it runs every minute and deletes if passed one minute.*/
+   @Cron(
+      development
+         ? CronExpression.EVERY_MINUTE
+         : CronExpression.EVERY_DAY_AT_1AM,
+   )
    async deleteDeactivatedUsers() {
       //Set contants:
       const now = new Date();
       const nowTime = now.toLocaleTimeString();
       const experationTime = development ? 1000 * 60 : 1000 * 60 * 60 * 24 * 7;
-      const runTime = development ? CronExpression.EVERY_MINUTE : CronExpression.EVERY_DAY_AT_1AM;
+      const runTime = development
+         ? CronExpression.EVERY_MINUTE
+         : CronExpression.EVERY_DAY_AT_1AM;
 
       //Print run info in console:
       console.log(`${nowTime}: CRON \`deleteDeactivatedUsers\` - RUNNED`);

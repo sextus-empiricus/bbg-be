@@ -1,5 +1,5 @@
-import { User } from '../entities/user.entity';
 import { UserMinified } from '../../types/users/user';
+import { User } from '../entities/user.entity';
 
 export const outputFilterUsers = (
    users: User[] | User | null,

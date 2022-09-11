@@ -18,13 +18,13 @@ export class AttachIconToTradePipe implements PipeTransform {
       createTradeDto: CreateTradeDto,
       metadata: ArgumentMetadata,
    ): Promise<any> {
-    /*
-    * ℹThe purpose of that logic is to avoid unessery API fetching for a common results as currency icon.
-    * This pipe checks symbol(currency) provided in DTO by a user.
-    * If entity of targeted symbol already exists in DB(IconUrl table) the pipe will attach it to the DTO.
-    * If not it will fetch an external API to get a currency icon url, then create an entity of new currency in DB
-    * and finaly attach it to a DTO. In a case a provided symbol wasn't found it returns null.
-    * */
+      /**
+       * ℹThe purpose of that logic is to avoid unessery API fetching for a common results as currency icon.
+       * This pipe checks symbol(currency) provided in DTO by a user.
+       * If entity of targeted symbol already exists in DB(IconUrl table) the pipe will attach it to the DTO.
+       * If not it will fetch an external API to get a currency icon url, then create an entity of new currency in DB
+       * and finaly attach it to a DTO. In a case a provided symbol wasn't found it returns null.
+       * */
       const { currency: symbol } = createTradeDto;
       let iconUrl = await this.iconUrlService.getBySymbol(symbol);
       if (!iconUrl) {

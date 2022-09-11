@@ -1,12 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, InsertResult } from 'typeorm';
-import { ResponseStatus } from '../types/api/response';
+import { ResponseStatus } from '../types/api';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
    GetAllUsersResponse,
-   GetUserByIdResponse,
-} from '../types/users/users.responses';
+   GetUserByResponse,
+} from '../types/users';
 import { CreateUserDto } from './dto';
 import { User } from './entities';
 import { outputFilterUsers } from './utils/outputFilter-users';
@@ -50,7 +50,7 @@ export class UsersService {
          .getMany();
    }
 
-   async getById(id: string): Promise<GetUserByIdResponse> {
+   async getById(id: string): Promise<GetUserByResponse> {
       const user = await this.dataSource
          .createQueryBuilder()
          .select('user')
@@ -62,6 +62,15 @@ export class UsersService {
          status: ResponseStatus.success,
          user: outputFilterUsers(user)[0],
       };
+   }
+   /**Internal use fn() - can return plain data.*/
+   async getByEmail(email: string): Promise<User | null> {
+      return await this.dataSource
+         .createQueryBuilder()
+         .select('user')
+         .from(User, 'user')
+         .where({ email })
+         .getOne();
    }
 
    async deactivateById(id: string): Promise<DeactivateUserByIdResponse> {

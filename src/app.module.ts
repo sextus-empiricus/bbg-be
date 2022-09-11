@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from '../config/app-config';
-import { UsersModule } from './users/users.module';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { CronModule } from './cron/cron.module';
-import { TradesModule } from './trades/trades.module';
-import { TradeHistoryModule } from './trade-history/trade-history.module';
 import { IconUrlModule } from './icon-url/icon-url.module';
+import { TradeHistoryModule } from './trade-history/trade-history.module';
+import { TradesModule } from './trades/trades.module';
+import { UsersModule } from './users/users.module';
 
 const { host, port, username, password, database } = appConfig.typeorm;
 
@@ -34,5 +34,4 @@ const { host, port, username, password, database } = appConfig.typeorm;
    controllers: [AppController],
    providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

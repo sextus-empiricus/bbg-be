@@ -1,10 +1,6 @@
-import { CreateTradeDtoInterface } from '../../types/trades/dto/create-trade-dto.interface';
-import {
-   IsNumber,
-   IsPositive,
-   IsString,
-} from 'class-validator';
+import { IsNumber, IsPositive, IsString } from 'class-validator';
 import { TradeHistory } from '../../trade-history/entities/trade-history.entity';
+import { CreateTradeDtoInterface } from '../../types/trades/dto/create-trade-dto.interface';
 
 export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsString()

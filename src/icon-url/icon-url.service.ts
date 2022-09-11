@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, InsertResult } from 'typeorm';
 import { CreateIconUrlDto } from '../types/icon-url';
 import { IconUrlInterface } from '../types/icon-url';
-import { IconUrl } from './entities/icon-url.entity';
+import { IconUrl } from './entities';
 
 @Injectable()
 export class IconUrlService {

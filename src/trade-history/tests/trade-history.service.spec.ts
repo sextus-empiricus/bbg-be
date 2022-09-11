@@ -1,10 +1,10 @@
-import { DataSource } from 'typeorm';
-import { ResponseStatus } from '../../types/api/response';
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { TradesService } from '../../trades/trades.service';
+import { ResponseStatus } from '../../types/api/response';
 import { TradeHistory } from '../entities/trade-history.entity';
 import { TradeHistoryService } from '../trade-history.service';
-import { TradesService } from '../../trades/trades.service';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('TradeHistoryService', () => {
    let service: TradeHistoryService;
@@ -128,17 +128,17 @@ describe('TradeHistoryService', () => {
       it('should call dt.cqb.select with proper selection', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'select');
          await service.getById(mockId);
-         expect(spy).toBeCalledWith(mockSelection)
+         expect(spy).toBeCalledWith(mockSelection);
       });
       it('should call dt.cqb.from with proper entity and alias', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'from');
          await service.getById(mockId);
-         expect(spy).toBeCalledWith(TradeHistory, mockAliasName)
+         expect(spy).toBeCalledWith(TradeHistory, mockAliasName);
       });
       it('should call dt.cqb.where with proper id', async () => {
          const spy = jest.spyOn(dataSource.createQueryBuilder(), 'where');
          await service.getById(mockId);
-         expect(spy).toBeCalledWith({id: mockId})
+         expect(spy).toBeCalledWith({ id: mockId });
       });
    });
 });

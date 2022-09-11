@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { getDataSourceToken } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
+import { ResponseStatus } from '../../types/api/response';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { ResponseStatus } from '../../types/api/response';
-import { DataSource } from 'typeorm';
-import { getDataSourceToken } from '@nestjs/typeorm';
 
 describe('UsersController', () => {
    let controller: UsersController;

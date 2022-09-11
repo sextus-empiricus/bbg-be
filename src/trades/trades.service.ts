@@ -19,8 +19,7 @@ export class TradesService {
    constructor(
       @Inject(DataSource) private dataSource: DataSource,
       @Inject(UsersService) private usersService: UsersService,
-   ) {
-   }
+   ) {}
 
    async create(
       dto: CreateTradeDto,

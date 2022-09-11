@@ -9,7 +9,7 @@ export interface GetAllUsersResponse extends SuccessResponse {
    usersList: UserMinified[];
 }
 
-export interface GetUserByIdResponse extends SuccessResponse {
+export interface GetUserByResponse extends SuccessResponse {
    user: UserMinified;
 }
 
