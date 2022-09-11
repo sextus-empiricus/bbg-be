@@ -1,25 +1,21 @@
-import {
-   Injectable,
-   ArgumentMetadata,
-   ConflictException,
-   PipeTransform,
-   Inject,
-} from '@nestjs/common';
-import { User } from '../users/entities/user.entity';
+import { ArgumentMetadata, ConflictException, Inject, Injectable, PipeTransform } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+import { User } from '../users/entities';
 
 @Injectable()
 export class DeactivateUserPipe implements PipeTransform {
-   constructor(@Inject(DataSource) private dataSource: DataSource) {}
+   constructor(@Inject(DataSource) private dataSource: DataSource) {
+   }
 
    async transform(value: string, metadata: ArgumentMetadata): Promise<string> {
       /*ℹCould use UsersService to get a user, but we are looking for `isActive` 
       and the service returns filterd data.*/
+      //TODO - it should use UsersService!
       const targetUser = await this.dataSource
          .createQueryBuilder()
          .select('user')
          .from(User, 'user')
-         .where({id: value})
+         .where({ id: value })
          .getOne();
 
       if (!targetUser) {

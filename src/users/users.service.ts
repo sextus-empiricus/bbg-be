@@ -1,3 +1,6 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { DataSource, InsertResult } from 'typeorm';
+import { ResponseStatus } from '../types/api/response';
 import {
    CreateUserResponse,
    DeactivateUserByIdResponse,
@@ -5,10 +8,7 @@ import {
    GetUserByIdResponse,
 } from '../types/users/users.responses';
 import { CreateUserDto } from './dto';
-import { DataSource, InsertResult } from 'typeorm';
-import { Inject, Injectable } from '@nestjs/common';
-import { ResponseStatus } from '../types/api/response';
-import { User } from './entities/user.entity';
+import { User } from './entities';
 import { outputFilterUsers } from './utils/outputFilter-users';
 
 @Injectable()
