@@ -3,7 +3,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { appConfig } from '../../../config/app-config';
-import { JwtPayload, JwtPayloadRefresh } from '../../types/auth';
+import { JwtPayload } from '../../types/auth';
 
 const { secretOrKey } = appConfig.jwt.refresh;
 
@@ -20,7 +20,7 @@ export class RefreshTokenStrategy extends PassportStrategy(
       });
    }
 
-   validate(req: Request, payload: JwtPayload): JwtPayloadRefresh {
+   validate(req: Request, payload: JwtPayload): JwtPayload {
       const refreshToken = req
          .get('authorization')
          .replace('Bearer', '')

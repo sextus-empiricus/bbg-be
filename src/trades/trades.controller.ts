@@ -7,6 +7,7 @@ import {
    Patch,
    Post,
 } from '@nestjs/common';
+import { GetCurrentUser } from '../decorators';
 import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 import {
    CreateTradeResponse,
@@ -22,15 +23,12 @@ import { TradesService } from './trades.service';
 export class TradesController {
    constructor(private readonly tradesService: TradesService) {}
 
-   /*💡This route will be changed after auth logic implement. User object will be assigned by `@UserObject()`
-    * decorator by user's id passed in token. Then 'user/userId' path won't be needed anymore.*/
-   @Post('/user/:userId')
+   @Post('/')
    create(
       @Body(AttachIconToTradePipe) createTradeDto: CreateTradeDto,
-      @Param('userId') userId: string,
-      // @UserObject(ValidateUserEnsPipe) user: User, || 🔍 comments in @UserObject() decor.
+      @GetCurrentUser('sub') id: string,
    ): Promise<CreateTradeResponse> {
-      return this.tradesService.create(createTradeDto, userId);
+      return this.tradesService.create(createTradeDto, id);
    }
 
    @Get('/')

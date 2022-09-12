@@ -9,7 +9,6 @@ export class AccessTokenGuard extends AuthGuard('jwt') {
       super();
    }
 
-   //@TODO - Cant make it public;
    canActivate(
       context: ExecutionContext,
    ): boolean | Promise<boolean> | Observable<boolean> {

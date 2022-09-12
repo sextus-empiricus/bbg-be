@@ -8,7 +8,7 @@ import {
 } from '@nestjs/common';
 import { GetCurrentUser, PublicRoute } from '../decorators';
 import { RefreshTokenGuard } from '../guards';
-import { TokensObject } from '../types/auth';
+import { JwtPayload, TokensObject } from '../types/auth';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 
@@ -40,7 +40,7 @@ export class AuthController {
    @UseGuards(RefreshTokenGuard)
    @Post('/refresh')
    @HttpCode(HttpStatus.OK)
-   async refreshTokens(@GetCurrentUser() user) {
+   async refreshTokens(@GetCurrentUser() user: JwtPayload) {
       return await this.authService.refreshTokens(user.sub, user.refreshToken);
    }
 }
