@@ -1,4 +1,4 @@
-import { User } from '../entities/user.entity';
+import { User } from '../entities';
 import { outputFilterUsers } from './outputFilter-users';
 
 describe('users - outputFilter', () => {
@@ -7,7 +7,7 @@ describe('users - outputFilter', () => {
       email: 'test@test.test',
       isActive: true,
       password: 'test1234',
-      authToken: '',
+      refreshToken: '',
       createdAt: new Date(),
       updatedAt: new Date(),
    };
@@ -15,7 +15,7 @@ describe('users - outputFilter', () => {
       id: 'id1234',
       email: 'test@test.test',
       password: 'test1234',
-      authToken: '',
+      refreshToken: '',
    };
    it('should return [null]', () => {
       expect(outputFilterUsers(null)).toStrictEqual([null]);
