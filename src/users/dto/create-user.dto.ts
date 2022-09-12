@@ -1,5 +1,5 @@
-import { IsEmail, IsString, Min, MinLength } from 'class-validator';
-import { CreateUserDtoInterface } from '../../types/users/dto/create-user.interface';
+import { IsEmail, IsString, MinLength } from 'class-validator';
+import { CreateUserDtoInterface } from '../../types/users';
 
 export class CreateUserDto implements CreateUserDtoInterface {
    @IsString()
