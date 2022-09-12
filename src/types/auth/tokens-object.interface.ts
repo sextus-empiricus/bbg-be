@@ -1,4 +1,4 @@
 export interface TokensObject {
-   authToken: string;
+   accessToken: string;
    refreshToken: string;
 }
