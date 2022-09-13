@@ -3,7 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { appConfig } from '../config/app-config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AuthModule } from './auth/auth.module';
 import { CronModule } from './cron/cron.module';
+import { AccessTokenGuard } from './guards';
 import { IconUrlModule } from './icon-url/icon-url.module';
 import { TradeHistoryModule } from './trade-history/trade-history.module';
 import { TradesModule } from './trades/trades.module';
@@ -25,13 +27,20 @@ const { host, port, username, password, database } = appConfig.typeorm;
          logging: false,
          synchronize: true,
       }),
-      UsersModule,
+      AuthModule,
       CronModule,
-      TradesModule,
-      TradeHistoryModule,
       IconUrlModule,
+      TradeHistoryModule,
+      TradesModule,
+      UsersModule,
    ],
    controllers: [AppController],
-   providers: [AppService],
+   providers: [
+      AppService,
+      {
+         provide: 'APP_GUARD',
+         useClass: AccessTokenGuard,
+      },
+   ],
 })
 export class AppModule {}

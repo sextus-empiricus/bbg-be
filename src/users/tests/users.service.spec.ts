@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { ResponseStatus } from '../../types/api/response';
-import { User } from '../entities/user.entity';
+import { ResponseStatus } from '../../types/api';
+import { User } from '../entities';
 import { UsersService } from '../users.service';
 
 describe('UsersService', () => {
@@ -32,7 +32,7 @@ describe('UsersService', () => {
                      id: 'test1234',
                      email: 'test@test.test',
                      password: 'test1234',
-                     authToken: 'test1234',
+                     refreshToken: 'test1234',
                   }),
                   getMany: jest
                      .fn()
@@ -41,7 +41,7 @@ describe('UsersService', () => {
                            id: 'test1234',
                            email: 'test1234',
                            password: 'test1234',
-                           authToken: 'test1234',
+                           refreshToken: 'test1234',
                         },
                      ])
                      .mockResolvedValueOnce([
@@ -49,11 +49,11 @@ describe('UsersService', () => {
                            id: 'test1234',
                            email: 'test1234',
                            password: 'test1234',
-                           authToken: 'test1234',
+                           refreshToken: 'test1234',
                            createdAt: new Date(),
                            updatedAt: new Date(),
                            isActive: false,
-                        } as User,
+                        },
                      ]),
                   //update:
                   update: jest.fn().mockReturnThis(),
@@ -112,7 +112,7 @@ describe('UsersService', () => {
                   id: expect.any(String),
                   email: expect.any(String),
                   password: expect.any(String),
-                  authToken: expect.any(String),
+                  refreshToken: expect.any(String),
                },
             ],
          });
@@ -135,7 +135,7 @@ describe('UsersService', () => {
                id: expect.any(String),
                email: expect.any(String),
                password: expect.any(String),
-               authToken: expect.any(String),
+               refreshToken: expect.any(String),
                createdAt: expect.any(Date),
                updatedAt: expect.any(Date),
                isActive: false,
@@ -172,7 +172,7 @@ describe('UsersService', () => {
                id: mockId,
                email: expect.any(String),
                password: expect.any(String),
-               authToken: expect.any(String),
+               refreshToken: expect.any(String),
             },
          });
       });

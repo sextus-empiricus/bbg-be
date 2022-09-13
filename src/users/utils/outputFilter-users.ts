@@ -1,5 +1,5 @@
-import { UserMinified } from '../../types/users/user';
-import { User } from '../entities/user.entity';
+import { UserMinified } from '../../types/users';
+import { User } from '../entities';
 
 export const outputFilterUsers = (
    users: User[] | User | null,
@@ -15,7 +15,7 @@ export const outputFilterUsers = (
             id: el.id,
             email: el.email,
             password: el.password,
-            authToken: el.authToken,
+            refreshToken: el.refreshToken,
          };
       });
    }

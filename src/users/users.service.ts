@@ -7,7 +7,7 @@ import {
    GetAllUsersResponse,
    GetUserByResponse,
 } from '../types/users';
-import { CreateUserDto } from './dto';
+import { CreateUserDto, UpdateUserDto } from './dto';
 import { User } from './entities';
 import { outputFilterUsers } from './utils/outputFilter-users';
 
@@ -63,6 +63,7 @@ export class UsersService {
          user: outputFilterUsers(user)[0],
       };
    }
+
    /**Internal use fn() - can return plain data.*/
    async getByEmail(email: string): Promise<User | null> {
       return await this.dataSource
@@ -71,6 +72,15 @@ export class UsersService {
          .from(User, 'user')
          .where({ email })
          .getOne();
+   }
+
+   async update(id: string, dto: UpdateUserDto): Promise<void> {
+      await this.dataSource
+         .createQueryBuilder()
+         .update(User)
+         .set(dto)
+         .where({ id })
+         .execute();
    }
 
    async deactivateById(id: string): Promise<DeactivateUserByIdResponse> {

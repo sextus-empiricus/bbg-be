@@ -1,6 +1,6 @@
-export interface UserMinified {
-   id: string;
-   email: string;
-   password: string;
-   authToken: string;
-}
+import { User } from '../../users/entities';
+
+export type UserMinified = Pick<
+   User,
+   'id' | 'email' | 'password' | 'refreshToken'
+>;

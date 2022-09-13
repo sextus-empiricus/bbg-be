@@ -7,7 +7,7 @@ import {
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { Trade } from '../../trades/entities/trade.entity';
+import { Trade } from '../../trades/entities';
 
 @Entity()
 export class User extends BaseEntity {
@@ -30,7 +30,7 @@ export class User extends BaseEntity {
       nullable: true,
       length: 76,
    })
-   authToken: string;
+   refreshToken: string;
 
    @CreateDateColumn()
    createdAt: Date;
