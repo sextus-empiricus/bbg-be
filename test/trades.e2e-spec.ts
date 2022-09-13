@@ -1,25 +1,39 @@
 import {
    ConflictException,
+   ExecutionContext,
    INestApplication,
    ValidationPipe,
 } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
+import { AccessTokenStrategy } from '../src/auth/strategies';
 import { IconUrlService } from '../src/icon-url/icon-url.service';
 import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
 import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
 import { TradesModule } from '../src/trades/trades.module';
 import { TradesService } from '../src/trades/trades.service';
-import { ResponseStatus } from '../src/types/api/response';
-import { TradeMinified } from '../src/types/trades/trade.interface';
+import { ResponseStatus } from '../src/types/api';
+import { TradeMinified } from '../src/types/trades';
 import { UsersService } from '../src/users/users.service';
 
 describe('TradesController (e2e)', () => {
    let app: INestApplication;
-
    beforeEach(async () => {
       const moduleFixture: TestingModule = await Test.createTestingModule({
          imports: [TradesModule],
+         providers: [
+            AccessTokenStrategy,
+            {
+               provide: 'APP_GUARD',
+               useValue: {
+                  canActivate: (context: ExecutionContext) => {
+                     const req = context.switchToHttp().getRequest();
+                     req.user = { sub: 'id1234' };
+                     return true;
+                  },
+               },
+            },
+         ],
       })
          .overrideProvider(TradesService)
          .useValue({
@@ -78,6 +92,7 @@ describe('TradesController (e2e)', () => {
             transform: true,
          }),
       );
+
       await app.init();
    });
 
@@ -89,16 +104,11 @@ describe('TradesController (e2e)', () => {
          price: 1000,
          amount: 0.5,
       };
-      const incorrectDto = {
-         boughtAt: '2022-12-06',
-         currency: 'btc',
-         boughtFor: 500,
-         amount: 0.5,
-      };
+      const { price, ...incorrectDto } = correctDto;
 
       it('should create new trade', () => {
          return request(app.getHttpServer())
-            .post('/trades/user/user1')
+            .post('/trades')
             .send(correctDto)
             .expect(201)
             .then((res) => {
@@ -108,15 +118,9 @@ describe('TradesController (e2e)', () => {
                });
             });
       });
-      it('user not exist - 409 expected', () => {
-         return request(app.getHttpServer())
-            .post('/trades/user/notExistingUser')
-            .send(correctDto)
-            .expect(409);
-      });
       it('incorrect dto - 400 expected', () => {
          return request(app.getHttpServer())
-            .post('/trades/user/user1')
+            .post('/trades')
             .send(incorrectDto)
             .expect(400);
       });
