@@ -3,7 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { DataSource } from 'typeorm';
 import { appConfig } from '../../config/app-config';
+import { ResponseStatus, SuccessResponse } from '../types/api';
 import { TokensObject } from '../types/auth';
+import { AuthResponse } from '../types/auth/auth.responses';
 import { UsersService } from '../users/users.service';
 import { AuthDto } from './dto';
 
@@ -18,17 +20,20 @@ export class AuthService {
       private jwtService: JwtService,
    ) {}
 
-   async signupLocal(dto: AuthDto): Promise<TokensObject> {
+   async signupLocal(dto: AuthDto): Promise<AuthResponse> {
       const { createdUserId } = await this.usersService.create({
          ...dto,
          password: await hash(dto.password, 12),
       });
       const tokens = await this.getTokens(createdUserId, dto.email);
       await this.updateUserRefreshToken(createdUserId, tokens.refreshToken);
-      return tokens;
+      return {
+         status: ResponseStatus.success,
+         tokens,
+      };
    }
 
-   async signinLocal(dto: AuthDto): Promise<TokensObject> {
+   async signinLocal(dto: AuthDto): Promise<AuthResponse> {
       const { email, password } = dto;
       const targetedUser = await this.usersService.getByEmail(email);
       if (!targetedUser) {
@@ -40,14 +45,23 @@ export class AuthService {
       }
       const tokens = await this.getTokens(targetedUser.id, email);
       await this.updateUserRefreshToken(targetedUser.id, tokens.refreshToken);
-      return tokens;
+      return {
+         status: ResponseStatus.success,
+         tokens,
+      };
    }
 
-   async logout(userId: string) {
+   async logout(userId: string): Promise<SuccessResponse> {
       await this.usersService.update(userId, { refreshToken: null });
+      return {
+         status: ResponseStatus.success,
+      };
    }
 
-   async refreshTokens(userId: string, refrestTokenHash: string) {
+   async refreshTokens(
+      userId: string,
+      refrestTokenHash: string,
+   ): Promise<AuthResponse> {
       const { user } = await this.usersService.getById(userId);
       if (!user || !user.refreshToken)
          throw new ForbiddenException('Access denied.');
@@ -55,7 +69,10 @@ export class AuthService {
       if (!refreshTokenMatches) throw new ForbiddenException('Access denied.');
       const tokens = await this.getTokens(user.id, user.email);
       await this.updateUserRefreshToken(user.id, tokens.refreshToken);
-      return tokens;
+      return {
+         status: ResponseStatus.success,
+         tokens,
+      };
    }
 
    //utility fns():
