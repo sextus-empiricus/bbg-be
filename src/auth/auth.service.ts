@@ -1,7 +1,6 @@
-import { ForbiddenException, Inject, Injectable } from '@nestjs/common';
+import { ForbiddenException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
-import { DataSource } from 'typeorm';
 import { appConfig } from '../../config/app-config';
 import { ResponseStatus, SuccessResponse } from '../types/api';
 import { TokensObject } from '../types/auth';
@@ -15,7 +14,6 @@ const { secretOrKey: secretRefresh } = appConfig.jwt.refresh;
 @Injectable()
 export class AuthService {
    constructor(
-      @Inject(DataSource) private dataSource: DataSource,
       private usersService: UsersService,
       private jwtService: JwtService,
    ) {}
@@ -37,11 +35,11 @@ export class AuthService {
       const { email, password } = dto;
       const targetedUser = await this.usersService.getByEmail(email);
       if (!targetedUser) {
-         throw new ForbiddenException('Inccorect email or passport.');
+         throw new ForbiddenException('Inccorect email or password.');
       }
       const passwordMatches = await compare(password, targetedUser.password);
       if (!passwordMatches) {
-         throw new ForbiddenException('Inccorect email or passport.');
+         throw new ForbiddenException('Inccorect email or password.');
       }
       const tokens = await this.getTokens(targetedUser.id, email);
       await this.updateUserRefreshToken(targetedUser.id, tokens.refreshToken);
@@ -60,12 +58,12 @@ export class AuthService {
 
    async refreshTokens(
       userId: string,
-      refrestTokenHash: string,
+      refreshToken: string,
    ): Promise<AuthResponse> {
       const { user } = await this.usersService.getById(userId);
       if (!user || !user.refreshToken)
          throw new ForbiddenException('Access denied.');
-      const refreshTokenMatches = compare(refrestTokenHash, user.refreshToken);
+      const refreshTokenMatches = await compare(refreshToken, user.refreshToken);
       if (!refreshTokenMatches) throw new ForbiddenException('Access denied.');
       const tokens = await this.getTokens(user.id, user.email);
       await this.updateUserRefreshToken(user.id, tokens.refreshToken);
@@ -76,10 +74,7 @@ export class AuthService {
    }
 
    //utility fns():
-   private async getTokens(
-      userId: string,
-      email: string,
-   ): Promise<TokensObject> {
+   async getTokens(userId: string, email: string): Promise<TokensObject> {
       const [accessToken, refreshToken] = await Promise.all([
          this.jwtService.signAsync(
             {
@@ -96,17 +91,16 @@ export class AuthService {
             { secret: secretRefresh, expiresIn: 60 * 60 * 60 * 24 * 7 },
          ),
       ]);
-      console.log({
-         accessToken,
-         refreshToken,
-      });
       return {
          accessToken,
          refreshToken,
       };
    }
 
-   private async updateUserRefreshToken(userId: string, refreshToken: string) {
+   async updateUserRefreshToken(
+      userId: string,
+      refreshToken: string,
+   ): Promise<void> {
       await this.usersService.update(userId, {
          refreshToken: await hash(refreshToken, 12),
       });
