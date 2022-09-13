@@ -63,7 +63,10 @@ export class AuthService {
       const { user } = await this.usersService.getById(userId);
       if (!user || !user.refreshToken)
          throw new ForbiddenException('Access denied.');
-      const refreshTokenMatches = await compare(refreshToken, user.refreshToken);
+      const refreshTokenMatches = await compare(
+         refreshToken,
+         user.refreshToken,
+      );
       if (!refreshTokenMatches) throw new ForbiddenException('Access denied.');
       const tokens = await this.getTokens(user.id, user.email);
       await this.updateUserRefreshToken(user.id, tokens.refreshToken);
