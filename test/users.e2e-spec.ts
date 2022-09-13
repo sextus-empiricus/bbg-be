@@ -7,8 +7,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import * as request from 'supertest';
 import { DeactivateUserPipe } from '../src/pipes/deactivate-user.pipe';
 import { ValidateNewUserPipe } from '../src/pipes/validate-new-user.pipe';
-import { ResponseStatus } from '../src/types/api/response';
-import { User } from '../src/users/entities/user.entity';
+import { ResponseStatus } from '../src/types/api';
+import { User } from '../src/users/entities';
 import { UsersModule } from '../src/users/users.module';
 import { UsersService } from '../src/users/users.service';
 
