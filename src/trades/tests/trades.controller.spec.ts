@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { IconUrlService } from '../../icon-url/icon-url.service';
-import { ResponseStatus } from '../../types/api/response';
+import { ResponseStatus } from '../../types/api';
 import { TradesController } from '../trades.controller';
 import { TradesService } from '../trades.service';
 

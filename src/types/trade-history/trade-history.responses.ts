@@ -1,4 +1,4 @@
-import { SuccessResponse } from '../api/response';
+import { SuccessResponse } from '../api';
 
 export interface CreateTradeHistoryResponse extends SuccessResponse {
    createdTradeHistoryId: string;

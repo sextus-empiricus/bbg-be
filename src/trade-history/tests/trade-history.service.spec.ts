@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { TradesService } from '../../trades/trades.service';
-import { ResponseStatus } from '../../types/api/response';
-import { TradeHistory } from '../entities/trade-history.entity';
+import { ResponseStatus } from '../../types/api';
+import { TradeHistory } from '../entities';
 import { TradeHistoryService } from '../trade-history.service';
 
 describe('TradeHistoryService', () => {

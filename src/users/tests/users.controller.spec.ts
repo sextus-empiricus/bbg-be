@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { ResponseStatus } from '../../types/api/response';
+import { ResponseStatus } from '../../types/api';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 
@@ -17,10 +17,10 @@ describe('UsersController', () => {
             {
                provide: UsersService,
                useValue: {
-                  create: jest.fn((dto) => ({
+                  create: jest.fn().mockResolvedValue({
                      status: ResponseStatus.success,
                      createdUserId: 'test1234',
-                  })),
+                  }),
                   getAll: jest.fn(() => ({
                      status: ResponseStatus.success,
                      usersList: [
@@ -32,7 +32,7 @@ describe('UsersController', () => {
                         },
                      ],
                   })),
-                  getById: jest.fn((id) => ({
+                  getById: jest.fn().mockResolvedValue({
                      status: ResponseStatus.success,
                      user: {
                         id: 'test1234',
@@ -40,11 +40,11 @@ describe('UsersController', () => {
                         password: 'test1234',
                         authToken: 'test1234',
                      },
-                  })),
-                  deactivateById: jest.fn((id) => ({
+                  }),
+                  deactivateById: jest.fn().mockResolvedValue({
                      status: ResponseStatus.success,
                      deactivatedUserId: 'test1234',
-                  })),
+                  }),
                },
             },
             {

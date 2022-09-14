@@ -7,7 +7,7 @@ import {
    PrimaryColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { Trade } from '../../trades/entities/trade.entity';
+import { Trade } from '../../trades/entities';
 
 @Entity()
 export class IconUrl extends BaseEntity {
