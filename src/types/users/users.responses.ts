@@ -1,4 +1,4 @@
-import { SuccessResponse } from '../api/response';
+import { SuccessResponse } from '../api';
 import { UserMinified } from './user';
 
 export interface CreateUserResponse extends SuccessResponse {

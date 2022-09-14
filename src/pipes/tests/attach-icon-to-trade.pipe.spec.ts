@@ -1,7 +1,7 @@
 import { HttpService } from '@nestjs/axios';
 import { ArgumentMetadata } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { IconUrl } from '../../icon-url/entities/icon-url.entity';
+import { IconUrl } from '../../icon-url/entities';
 import { IconUrlService } from '../../icon-url/icon-url.service';
 import { AttachIconToTradePipe } from '../attach-icon-to-trade.pipe';
 

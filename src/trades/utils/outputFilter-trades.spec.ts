@@ -1,4 +1,4 @@
-import { Trade } from '../entities/trade.entity';
+import { Trade } from '../entities';
 import { outputFilterTrades } from './outputFilter-trades';
 
 const mockTrade = {

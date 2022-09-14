@@ -22,9 +22,6 @@ export class CronService {
       const now = new Date();
       const nowTime = now.toLocaleTimeString();
       const experationTime = development ? 1000 * 60 : 1000 * 60 * 60 * 24 * 7;
-      const runTime = development
-         ? CronExpression.EVERY_MINUTE
-         : CronExpression.EVERY_DAY_AT_1AM;
 
       //Print run info in console:
       console.log(`${nowTime}: CRON \`deleteDeactivatedUsers\` - RUNNED`);

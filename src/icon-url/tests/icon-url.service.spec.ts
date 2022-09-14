@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { IconUrl } from '../entities/icon-url.entity';
+import { IconUrl } from '../entities';
 import { IconUrlService } from '../icon-url.service';
 
 describe('IconUrlService', () => {
@@ -20,9 +20,9 @@ describe('IconUrlService', () => {
                   insert: jest.fn().mockReturnThis(),
                   into: jest.fn().mockReturnThis(),
                   values: jest.fn().mockReturnThis(),
-                  execute: jest.fn((dto) => ({
+                  execute: jest.fn().mockResolvedValue({
                      identifiers: [{ symbol: 'btc' }],
-                  })),
+                  }),
                   //select:
                   select: jest.fn().mockReturnThis(),
                   from: jest.fn().mockReturnThis(),

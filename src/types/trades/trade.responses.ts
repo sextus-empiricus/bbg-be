@@ -1,4 +1,4 @@
-import { SuccessResponse } from '../api/response';
+import { SuccessResponse } from '../api';
 import { TradeMinified } from './trade.interface';
 
 export interface CreateTradeResponse extends SuccessResponse {

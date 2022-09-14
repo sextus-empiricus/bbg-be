@@ -1,4 +1,4 @@
-import { Trade } from '../../trades/entities/trade.entity';
+import { Trade } from '../../trades/entities';
 
 export interface TradeHistoryInterface {
    id: string;

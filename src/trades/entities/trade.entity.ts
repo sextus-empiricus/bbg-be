@@ -5,15 +5,13 @@ import {
    Entity,
    JoinColumn,
    ManyToOne,
-   OneToMany,
    OneToOne,
    PrimaryGeneratedColumn,
    UpdateDateColumn,
 } from 'typeorm';
-import { IconUrl } from '../../icon-url/entities/icon-url.entity';
-import { TradeHistory } from '../../trade-history/entities/trade-history.entity';
-import { TradeInterface } from '../../types/trades/trade.interface';
-import { User } from '../../users/entities/user.entity';
+import { IconUrl } from '../../icon-url/entities';
+import { TradeHistory } from '../../trade-history/entities';
+import { User } from '../../users/entities';
 
 @Entity()
 export class Trade extends BaseEntity {
