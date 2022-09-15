@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { DummyGeneratorService } from './dummy-generator.service';
+import { DummyGeneratorService } from '../dummy-generator.service';
 
 describe('DummyGeneratorService', () => {
   let service: DummyGeneratorService;

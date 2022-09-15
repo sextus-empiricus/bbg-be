@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker';
 import { Injectable } from '@nestjs/common';
 import { ExternalApisService } from '../external-apis/external-apis.service';
+import { IconUrlService } from '../icon-url/icon-url.service';
 import { CreateTradeHistoryDto } from '../trade-history/dto';
 import { TradeHistoryService } from '../trade-history/trade-history.service';
 import { CreateTradeDto } from '../trades/dto';
@@ -22,13 +23,14 @@ export class DummyGeneratorService {
    ];
 
    constructor(
-      private tradeHistoryService: TradeHistoryService,
-      private tradesService: TradesService,
-      private externalApis: ExternalApisService,
+      private readonly tradeHistoryService: TradeHistoryService,
+      private readonly tradesService: TradesService,
+      private readonly externalApis: ExternalApisService,
+      private readonly iconUrlService: IconUrlService,
    ) {}
 
    async generateTrades(userId: string) {
-      for (let i = 0; i < 2; i++) {
+      for (let i = 0; i < 10; i++) {
          const [boughtAt, boughtForApi] = this.getRandomDateFrom(
             new Date('2021-01-01'),
          );
@@ -37,7 +39,7 @@ export class DummyGeneratorService {
             currencyId,
             boughtForApi,
          );
-         const newTradeDto = this.getNewTradeDto(response, boughtAt);
+         const newTradeDto = await this.getNewTradeDto(response, boughtAt);
          const { createdTradeId } = await this.tradesService.create(
             newTradeDto,
             userId,
@@ -49,7 +51,6 @@ export class DummyGeneratorService {
                createdTradeId,
             );
       }
-      //***TODO - update `attach-icon-to-trade` logic. it is not usefull here because it's a pipe;
    }
 
    //utility fns():
@@ -86,18 +87,21 @@ export class DummyGeneratorService {
       return this.currencyIds[randomIndex];
    }
 
-   private getNewTradeDto(apiResponse: any, boughtAt: string): CreateTradeDto {
+   private async getNewTradeDto(
+      apiResponse: any,
+      boughtAt: string,
+   ): Promise<CreateTradeDto> {
       const currency = apiResponse.symbol;
       const price = apiResponse.market_data.current_price.usd;
       const boughtFor = faker.datatype.number({ min: 10, max: 500 });
       const amount = boughtFor / price;
-      return {
+      return await this.iconUrlService.attachIconUrlToTradeDto({
          amount,
          boughtAt,
          boughtFor,
          currency,
          price,
-      };
+      });
    }
 
    private getNewTradeHistoryDto(
