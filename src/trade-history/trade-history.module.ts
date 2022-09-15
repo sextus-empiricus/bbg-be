@@ -7,5 +7,6 @@ import { TradeHistoryService } from './trade-history.service';
    imports: [TradesModule],
    controllers: [TradeHistoryController],
    providers: [TradeHistoryService],
+   exports: [TradeHistoryService],
 })
 export class TradeHistoryModule {}
