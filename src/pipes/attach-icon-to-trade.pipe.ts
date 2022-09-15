@@ -9,7 +9,7 @@ export class AttachIconToTradePipe implements PipeTransform {
    async transform(
       createTradeDto: CreateTradeDto,
       metadata: ArgumentMetadata,
-   ): Promise<any> {
+   ): Promise<CreateTradeDto> {
       return await this.iconUrlService.attachIconUrlToTradeDto(createTradeDto);
    }
 }
