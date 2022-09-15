@@ -14,21 +14,21 @@ const { authHeader, getIconUrl } = appConfig.externalApis.coinMarketCap;
 export class ExternalApisService {
    constructor(private httpService: HttpService) {}
 
-   /**Fn() calls external `CoinGecko` API. It has 50 calls per minute rate limit.
-    * @param {string} currencyId currency id of coingGecko API;
-    * @param {string} date DD-MM-YYYY;
-    * */
    async getCurrencyHistoricalData(
       currencyId: string,
-      date: string,
+      date: Date,
    ): Promise<any> {
+      const [day, month, year] = date.toLocaleDateString().split('.');
+      const dateForApi = `${day}-${month}-${year}`;
       try {
          const coinGeckoApiResponse = await this.httpService
-            .get(`${coinsUrl}/${currencyId}/history?date=${date}`)
+            .get(`${coinsUrl}/${currencyId}/history?date=${dateForApi}`)
             .pipe(map((res) => res.data));
          return await lastValueFrom(coinGeckoApiResponse);
       } catch (e) {
-         throw new ServiceUnavailableException();
+         throw new ServiceUnavailableException(
+            'To many calls. Rate limit: 50 for minute.',
+         );
       }
    }
 

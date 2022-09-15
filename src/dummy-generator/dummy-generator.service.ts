@@ -31,13 +31,11 @@ export class DummyGeneratorService {
 
    async generateTrades(userId: string) {
       for (let i = 0; i < 10; i++) {
-         const [boughtAt, boughtForApi] = this.getRandomDateFrom(
-            new Date('2021-01-01'),
-         );
+         const boughtAt = this.getRandomDateSince(new Date('2021-01-01'));
          const currencyId = this.getRandomCurrienciyId();
          const response = await this.externalApis.getCurrencyHistoricalData(
             currencyId,
-            boughtForApi,
+            boughtAt,
          );
          const newTradeDto = await this.getNewTradeDto(response, boughtAt);
          const { createdTradeId } = await this.tradesService.create(
@@ -59,12 +57,10 @@ export class DummyGeneratorService {
       currencyId: string,
       tradeId: string,
    ): Promise<any> {
-      const [soldAt, soldAtForApi] = this.getRandomDateFrom(
-         new Date(newTradeDto.boughtAt),
-      );
+      const soldAt = this.getRandomDateSince(new Date(newTradeDto.boughtAt));
       const response = await this.externalApis.getCurrencyHistoricalData(
          currencyId,
-         soldAtForApi,
+         soldAt,
       );
       const createTradeHistoryDto = this.getNewTradeHistoryDto(
          response,
@@ -74,10 +70,8 @@ export class DummyGeneratorService {
       await this.tradeHistoryService.create(createTradeHistoryDto, tradeId);
    }
 
-   private getRandomDateFrom(from: Date): string[] {
-      const randomDate = faker.date.between(from, new Date());
-      const [day, month, year] = randomDate.toLocaleDateString().split('.');
-      return [randomDate.toISOString(), `${day}-${month}-${year}`];
+   private getRandomDateSince(from: Date): Date {
+      return faker.date.between(from, new Date());
    }
 
    private getRandomCurrienciyId(): string {
@@ -89,7 +83,7 @@ export class DummyGeneratorService {
 
    private async getNewTradeDto(
       apiResponse: any,
-      boughtAt: string,
+      boughtAt: Date,
    ): Promise<CreateTradeDto> {
       const currency = apiResponse.symbol;
       const price = apiResponse.market_data.current_price.usd;
@@ -97,7 +91,7 @@ export class DummyGeneratorService {
       const amount = boughtFor / price;
       return await this.iconUrlService.attachIconUrlToTradeDto({
          amount,
-         boughtAt,
+         boughtAt: boughtAt.toISOString(),
          boughtFor,
          currency,
          price,
@@ -107,7 +101,7 @@ export class DummyGeneratorService {
    private getNewTradeHistoryDto(
       apiResponse: any,
       newTradeDto: CreateTradeDto,
-      soldAt: string,
+      soldAt: Date,
    ): CreateTradeHistoryDto {
       const { usd: price } = apiResponse.market_data.current_price;
       const profitCash = price * newTradeDto.amount - newTradeDto.boughtFor;
@@ -117,7 +111,7 @@ export class DummyGeneratorService {
          price,
          profitCash,
          profitPerc,
-         soldAt,
+         soldAt: soldAt.toISOString(),
          soldFor,
       };
    }
