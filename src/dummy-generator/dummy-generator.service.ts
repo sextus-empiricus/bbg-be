@@ -25,15 +25,15 @@ export class DummyGeneratorService {
    constructor(
       private readonly tradeHistoryService: TradeHistoryService,
       private readonly tradesService: TradesService,
-      private readonly externalApis: ExternalApisService,
+      private readonly externalApisService: ExternalApisService,
       private readonly iconUrlService: IconUrlService,
    ) {}
 
-   async generateTrades(userId: string) {
+   async generateTrades(userId: string): Promise<void> {
       for (let i = 0; i < 10; i++) {
          const boughtAt = this.getRandomDateSince(new Date('2021-01-01'));
          const currencyId = this.getRandomCurrienciyId();
-         const response = await this.externalApis.getCurrencyHistoricalData(
+         const response = await this.externalApisService.getCurrencyHistoricalData(
             currencyId,
             boughtAt,
          );
@@ -56,9 +56,9 @@ export class DummyGeneratorService {
       newTradeDto: CreateTradeDto,
       currencyId: string,
       tradeId: string,
-   ): Promise<any> {
+   ): Promise<void> {
       const soldAt = this.getRandomDateSince(new Date(newTradeDto.boughtAt));
-      const response = await this.externalApis.getCurrencyHistoricalData(
+      const response = await this.externalApisService.getCurrencyHistoricalData(
          currencyId,
          soldAt,
       );
