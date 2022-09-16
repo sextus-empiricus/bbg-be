@@ -10,6 +10,7 @@ import { AuthDto } from './dto';
 
 const { secretOrKey: secretAccess } = appConfig.jwt.access;
 const { secretOrKey: secretRefresh } = appConfig.jwt.refresh;
+const { development } = appConfig.app;
 
 @Injectable()
 export class AuthService {
@@ -78,20 +79,25 @@ export class AuthService {
 
    //utility fns():
    async getTokens(userId: string, email: string): Promise<TokensObject> {
+      const oneMinute = 60 * 15;
+      const oneWeek = 60 * 60 * 60 * 24 * 7;
       const [accessToken, refreshToken] = await Promise.all([
          this.jwtService.signAsync(
             {
                sub: userId,
                email: email,
             },
-            { secret: secretAccess, expiresIn: 60 * 15 },
+            {
+               secret: secretAccess,
+               expiresIn: development ? oneWeek : oneMinute,
+            },
          ),
          this.jwtService.signAsync(
             {
                sub: userId,
                email: email,
             },
-            { secret: secretRefresh, expiresIn: 60 * 60 * 60 * 24 * 7 },
+            { secret: secretRefresh, expiresIn: oneWeek },
          ),
       ]);
       return {

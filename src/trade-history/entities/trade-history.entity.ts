@@ -35,14 +35,14 @@ export class TradeHistory extends BaseEntity {
 
    @Column({
       type: 'decimal',
-      precision: 5,
+      precision: 10,
       scale: 3,
    })
    profitPerc: number;
 
    @Column({
       type: 'decimal',
-      precision: 5,
+      precision: 10,
       scale: 3,
    })
    profitCash: number;
