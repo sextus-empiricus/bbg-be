@@ -26,7 +26,7 @@ export class OwnerOnlyGuard implements CanActivate {
          .leftJoinAndSelect('trade.user', 'user')
          .where('trade.id = :id', { id: tradeId })
          .getOne();
-      if (trade.user.id !== userId)
+      if (!trade.user || trade.user.id !== userId)
          throw new ForbiddenException(
             'Can not impact on trade of another user.',
          );
