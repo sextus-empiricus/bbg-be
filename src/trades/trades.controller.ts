@@ -6,17 +6,18 @@ import {
    Param,
    Patch,
    Post,
+   Query, UseGuards,
 } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
+import { OwnerOnlyGuard } from '../guards';
 import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
-   GetAllTradesResponse,
-   GetTradeByIdResponse,
    UpdatedTradeResponse,
 } from '../types/trades';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
+import { GetAllMyActiveQueryDto } from './dto/get-all-my-active-query.dto';
 import { TradesService } from './trades.service';
 
 @Controller('trades')
@@ -31,26 +32,30 @@ export class TradesController {
       return this.tradesService.create(createTradeDto, id);
    }
 
-   @Get('/')
-   getAll(): Promise<GetAllTradesResponse> {
-      return this.tradesService.getAll();
+   @Get('/my')
+   async getAllMy(
+      @GetCurrentUser('sub') id: string,
+      @Query() query: GetAllMyActiveQueryDto,
+   ) {
+      return await this.tradesService.getAllMy(id, query);
    }
 
-   @Get('/:id')
-   getById(@Param('id') id: string): Promise<GetTradeByIdResponse> {
-      return this.tradesService.getById(id);
-   }
-
-   @Patch('/:id')
-   update(
-      @Param('id') id: string,
+   @UseGuards(OwnerOnlyGuard)
+   @Patch('/my/:id')
+   updateMy(
+      @Param('id') tradeId: string,
+      @GetCurrentUser('sub') userId: string,
       @Body() updateTradeDto: UpdateTradeDto,
    ): Promise<UpdatedTradeResponse> {
-      return this.tradesService.update(id, updateTradeDto);
+      return this.tradesService.update(tradeId, updateTradeDto);
    }
 
-   @Delete('/:id')
-   async remove(@Param('id') id: string): Promise<DeleteTradeByIdResponse> {
-      return await this.tradesService.remove(id);
+   @UseGuards(OwnerOnlyGuard)
+   @Delete('/my/:id')
+   async removeMy(
+      @Param('id') tradeId: string,
+      @GetCurrentUser('sub') userId: string,
+   ): Promise<DeleteTradeByIdResponse> {
+      return await this.tradesService.remove(tradeId);
    }
 }

@@ -5,8 +5,15 @@ export interface CreateTradeResponse extends SuccessResponse {
    createdTradeId: string;
 }
 
+export interface GetAllMyResponse extends SuccessResponse {
+   results: number;
+   pages: number;
+   page: number;
+   tradesList: TradeMinified[];
+}
+
 export interface GetAllTradesResponse extends SuccessResponse {
-   tradesList: TradeMinified[]; //| TradeMinified;
+   tradesList: TradeMinified[];
 }
 
 export interface GetTradeByIdResponse extends SuccessResponse {
