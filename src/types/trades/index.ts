@@ -1,3 +1,5 @@
 export * from './dto';
 export * from './trade.interface';
 export * from './trade.responses';
+export * from './trades';
+export * from './utils';
