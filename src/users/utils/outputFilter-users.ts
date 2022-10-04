@@ -14,12 +14,11 @@ export const outputFilterUsers = (
          return {
             id: el.id,
             email: el.email,
-            password: el.password,
             refreshToken: el.refreshToken,
          };
       });
    }
    /*If users is an object:*/
-   const { createdAt, updatedAt, isActive, ...user } = users;
+   const { createdAt, updatedAt, password, isActive, ...user } = users;
    return [user];
 };
