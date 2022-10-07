@@ -1,6 +1,5 @@
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { DataSource, InsertResult, SelectQueryBuilder } from 'typeorm';
-import { ResponseStatus } from '../types/api';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
@@ -10,7 +9,7 @@ import {
    GetTradeByIdResponse,
    TradeMinified,
    UpdatedTradeResponse,
-} from '../types/trades';
+} from '../types';
 import { UsersService } from '../users/users.service';
 import { stringToBoolean } from '../utils';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
@@ -40,7 +39,6 @@ export class TradesService {
          .values({ ...dto, user })
          .execute();
       return {
-         status: ResponseStatus.success,
          createdTradeId: insertResult.identifiers[0].id,
       };
    }
@@ -89,7 +87,6 @@ export class TradesService {
       dbQuery.limit(limit).offset(offset);
 
       return {
-         status: ResponseStatus.success,
          results: count,
          pages,
          page,
@@ -106,7 +103,6 @@ export class TradesService {
          .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .getMany();
       return {
-         status: ResponseStatus.success,
          tradesList: outputFilterTrades(tradesList),
       };
    }
@@ -121,7 +117,6 @@ export class TradesService {
          .where('trade.id = :id', { id })
          .getOne();
       return {
-         status: ResponseStatus.success,
          trade: outputFilterTrades(trade)[0] as TradeMinified,
       };
    }
@@ -137,7 +132,6 @@ export class TradesService {
          .where({ id: tradeId })
          .execute();
       return {
-         status: ResponseStatus.success,
          updatedTradeId: tradeId,
       };
    }
@@ -150,7 +144,6 @@ export class TradesService {
          .where({ id })
          .execute();
       return {
-         status: ResponseStatus.success,
          deletedTradeId: id,
       };
    }

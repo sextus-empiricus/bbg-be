@@ -6,7 +6,8 @@ import {
    Param,
    Patch,
    Post,
-   Query, UseGuards,
+   Query,
+   UseGuards,
 } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
 import { OwnerOnlyGuard } from '../guards';
@@ -15,7 +16,7 @@ import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
    UpdatedTradeResponse,
-} from '../types/trades';
+} from '../types';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
 import { GetAllMyActiveQueryDto } from './dto/get-all-my-active-query.dto';
 import { TradesService } from './trades.service';
