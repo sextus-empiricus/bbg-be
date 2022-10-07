@@ -9,6 +9,7 @@ import {
    GetTradeByIdResponse,
    TradeMinified,
    UpdatedTradeResponse,
+   UserCurrenciesEntity,
 } from '../types';
 import { UsersService } from '../users/users.service';
 import { stringToBoolean } from '../utils';
@@ -190,11 +191,22 @@ export class TradesService {
    private async getArrayOfUserCurrencies(
       userId: string,
       historical: boolean,
-   ): Promise<string[]> {
-      const onlyUnique = (value, index, self) => {
-         return self.indexOf(value) === index;
-      };
+   ): Promise<UserCurrenciesEntity[]> {
       const userTrades = await this.getMyAll(userId, historical);
-      return userTrades.map((el) => el.currency).filter(onlyUnique);
+      const mappedData = userTrades.map((el) => ({
+         currency: el.currency,
+         iconUrl: el.iconUrl.url,
+      }));
+      const filteredData = [];
+      mappedData.forEach(function (item) {
+         const i = filteredData.findIndex((el) => el.iconUrl == item.iconUrl);
+         if (i <= -1) {
+            filteredData.push({
+               currency: item.currency,
+               iconUrl: item.iconUrl,
+            });
+         }
+      });
+      return filteredData;
    }
 }

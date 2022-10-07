@@ -27,7 +27,7 @@ export class TradesController {
    constructor(private readonly tradesService: TradesService) {}
 
    @Post('/')
-   create(
+   async create(
       @Body(AttachIconToTradePipe) createTradeDto: CreateTradeDto,
       @GetCurrentUser('sub') id: string,
    ): Promise<CreateTradeResponse> {
@@ -38,13 +38,13 @@ export class TradesController {
    async getMyPaginated(
       @GetCurrentUser('sub') id: string,
       @Query() query: GetMyPaginated,
-   ): Promise<GetMyPaginatedResponse> {
+   ): Promise<GetMyPaginatedResponse>   {
       return await this.tradesService.getMyPaginated(id, query);
    }
 
    @UseGuards(OwnerOnlyGuard)
    @Patch('/my/:id')
-   updateMy(
+   async updateMy(
       @Param('id') tradeId: string,
       @GetCurrentUser('sub') userId: string,
       @Body() updateTradeDto: UpdateTradeDto,
