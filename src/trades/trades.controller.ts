@@ -15,10 +15,11 @@ import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
+   GetMyPaginatedResponse,
    UpdatedTradeResponse,
 } from '../types';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { GetAllMyActiveQueryDto } from './dto/get-all-my-active-query.dto';
+import { GetMyPaginated } from './dto/get-my.paginated';
 import { TradesService } from './trades.service';
 
 @Controller('trades')
@@ -34,11 +35,11 @@ export class TradesController {
    }
 
    @Get('/my')
-   async getAllMy(
+   async getMyPaginated(
       @GetCurrentUser('sub') id: string,
-      @Query() query: GetAllMyActiveQueryDto,
-   ) {
-      return await this.tradesService.getAllMy(id, query);
+      @Query() query: GetMyPaginated,
+   ): Promise<GetMyPaginatedResponse> {
+      return await this.tradesService.getMyPaginated(id, query);
    }
 
    @UseGuards(OwnerOnlyGuard)

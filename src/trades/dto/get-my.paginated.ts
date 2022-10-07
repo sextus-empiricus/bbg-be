@@ -1,7 +1,7 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 import { QueryOrder, QuerySortBy } from '../../types/trades';
 
-export class GetAllMyActiveQueryDto {
+export class GetMyPaginated {
    @IsOptional()
    @IsString()
    historical: string;

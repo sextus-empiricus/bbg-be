@@ -3,8 +3,8 @@ import { DataSource, InsertResult, SelectQueryBuilder } from 'typeorm';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
-   GetAllMyResponse,
    GetAllTradesResponse,
+   GetMyPaginatedResponse,
    GetPaginationDataResult,
    GetTradeByIdResponse,
    TradeMinified,
@@ -13,7 +13,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { stringToBoolean } from '../utils';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { GetAllMyActiveQueryDto } from './dto/get-all-my-active-query.dto';
+import { GetMyPaginated } from './dto/get-my.paginated';
 import { Trade } from './entities';
 import { outputFilterTrades } from './utils/outputFilter-trades';
 
@@ -43,10 +43,10 @@ export class TradesService {
       };
    }
 
-   async getAllMy(
+   async getMyPaginated(
       userId: string,
-      query: GetAllMyActiveQueryDto,
-   ): Promise<GetAllMyResponse> {
+      query: GetMyPaginated,
+   ): Promise<GetMyPaginatedResponse> {
       let dbQuery: SelectQueryBuilder<Trade> = await this.dataSource
          .createQueryBuilder()
          .select('trade')
@@ -86,12 +86,36 @@ export class TradesService {
          await this.getPaginationData(query, dbQuery);
       dbQuery.limit(limit).offset(offset);
 
+      //USER CURRENCIES ARR:
+      const historical = query.historical
+         ? stringToBoolean(query.historical)
+         : false;
+      const userCurrencies = await this.getArrayOfUserCurrencies(
+         userId,
+         historical,
+      );
+
       return {
          results: count,
          pages,
          page,
+         userCurrencies,
          tradesList: outputFilterTrades(await dbQuery.getMany()),
       };
+   }
+
+   async getMyAll(userId: string, historical: boolean): Promise<Trade[]> {
+      return await this.dataSource
+         .createQueryBuilder()
+         .select('trade')
+         .from(Trade, 'trade')
+         .leftJoinAndSelect('trade.tradeHistory', 'tradeHistory')
+         .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
+         .where({
+            inExchange: historical,
+            user: { id: userId },
+         })
+         .getMany();
    }
 
    async getAll(): Promise<GetAllTradesResponse> {
@@ -161,5 +185,16 @@ export class TradesService {
       if (query.page >= pages) page = pages;
       const offset = (page - 1) * limit;
       return { count, limit, offset, pages, page };
+   }
+
+   private async getArrayOfUserCurrencies(
+      userId: string,
+      historical: boolean,
+   ): Promise<string[]> {
+      const onlyUnique = (value, index, self) => {
+         return self.indexOf(value) === index;
+      };
+      const userTrades = await this.getMyAll(userId, historical);
+      return userTrades.map((el) => el.currency).filter(onlyUnique);
    }
 }
