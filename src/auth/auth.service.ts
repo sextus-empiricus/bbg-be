@@ -1,10 +1,17 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+   ConflictException,
+   ForbiddenException,
+   Injectable,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { appConfig } from '../../config/app-config';
-import { ResponseStatus, SuccessResponse } from '../types/api';
-import { TokensObject } from '../types/auth';
-import { AuthResponse } from '../types/auth/auth.responses';
+import {
+   AuthResponse,
+   ResponseStatus,
+   SuccessResponse,
+   TokensObject,
+} from '../types';
 import { UsersService } from '../users/users.service';
 import { AuthDto } from './dto';
 
@@ -20,6 +27,10 @@ export class AuthService {
    ) {}
 
    async signupLocal(dto: AuthDto): Promise<AuthResponse> {
+      const targetedUser = await this.usersService.getByEmail(dto.email);
+      if (targetedUser) {
+         throw new ConflictException('Email address already in use.');
+      }
       const { createdUserId } = await this.usersService.create({
          ...dto,
          password: await hash(dto.password, 12),
