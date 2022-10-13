@@ -66,7 +66,7 @@ export class TradesService {
       //SORT-ORDER:
       // plain 'price' value belongs to two tables; TODO - when working on historical table add historical case;
       if (!query.historical && query.sortBy === 'price')
-         query.sortBy = 'trade.price';
+         query.sortBy = 'trade.price' as any;
       if (query.sortBy || query.order) {
          dbQuery = dbQuery.orderBy(
             query.sortBy ? query.sortBy : 'boughtAt',

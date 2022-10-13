@@ -13,11 +13,11 @@ export enum QueryOrder {
 
 export interface GetMyPaginatedQueryInterface {
    historical?: string;
-   sortBy?: string;
-   order?: string;
+   sortBy?: QuerySortBy;
+   order?: QueryOrder;
    currency?: string;
    page?: number;
-   limit?: string;
+   limit?: number;
    from?: string;
    to?: string;
 }

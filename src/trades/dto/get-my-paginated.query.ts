@@ -1,40 +1,39 @@
-import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNumber, IsOptional } from 'class-validator';
 import {
    GetMyPaginatedQueryInterface,
    QueryOrder,
    QuerySortBy,
 } from '../../types';
 
-export class GetMyPaginatedQuery implements GetMyPaginatedQueryInterface{
+export class GetMyPaginatedQuery implements GetMyPaginatedQueryInterface {
    @IsOptional()
-   @IsString()
    historical: string;
 
    @IsOptional()
-   @IsEnum(QuerySortBy)
-   sortBy: string;
+   @IsEnum(QuerySortBy, {
+      message:
+         'Incorrect query param. Allowed values: "amount", "boughtAt", "boughtFor", "currency", "price".',
+   })
+   sortBy: QuerySortBy;
 
    @IsOptional()
-   @IsEnum(QueryOrder)
-   order: string;
+   @IsEnum(QueryOrder, {
+      message: 'Incorrect query param. Allowed values: "asc", "desc".',
+   })
+   order: QueryOrder;
 
    @IsOptional()
-   @IsString()
    currency: string;
 
    @IsOptional()
-   @IsString()
    page: number;
 
    @IsOptional()
-   @IsString()
-   limit: string;
+   limit: number;
 
    @IsOptional()
-   @IsString()
    from: string;
 
    @IsOptional()
-   @IsString()
    to: string;
 }
