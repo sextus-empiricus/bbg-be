@@ -11,7 +11,13 @@ export enum QueryOrder {
    DESC = 'desc',
 }
 
-export interface GetAllMyQueryObj {
-   sortBy: QuerySortBy;
-   order: QueryOrder;
+export interface GetMyPaginatedQueryInterface {
+   historical?: string;
+   sortBy?: string;
+   order?: string;
+   currency?: string;
+   page?: number;
+   limit?: string;
+   from?: string;
+   to?: string;
 }
