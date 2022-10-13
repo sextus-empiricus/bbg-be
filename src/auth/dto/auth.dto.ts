@@ -1,6 +1,7 @@
 import { IsEmail, IsString, MinLength } from 'class-validator';
+import { AuthDtoInterface } from '../../types';
 
-export class AuthDto {
+export class AuthDto implements AuthDtoInterface {
    @IsEmail()
    email: string;
    @IsString()

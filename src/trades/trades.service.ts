@@ -14,7 +14,7 @@ import {
 import { UsersService } from '../users/users.service';
 import { stringToBoolean } from '../utils';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { GetMyPaginated } from './dto/get-my.paginated';
+import { GetMyPaginatedQuery } from './dto/get-my-paginated.query';
 import { Trade } from './entities';
 import { outputFilterTrades } from './utils/outputFilter-trades';
 
@@ -46,8 +46,9 @@ export class TradesService {
 
    async getMyPaginated(
       userId: string,
-      query: GetMyPaginated,
+      query: GetMyPaginatedQuery,
    ): Promise<GetMyPaginatedResponse> {
+      console.log(query);
       let dbQuery: SelectQueryBuilder<Trade> = await this.dataSource
          .createQueryBuilder()
          .select('trade')
@@ -63,6 +64,9 @@ export class TradesService {
          .orderBy('boughtAt', 'DESC');
 
       //SORT-ORDER:
+      // plain 'price' value belongs to two tables; TODO - when working on historical table add historical case;
+      if (!query.historical && query.sortBy === 'price')
+         query.sortBy = 'trade.price';
       if (query.sortBy || query.order) {
          dbQuery = dbQuery.orderBy(
             query.sortBy ? query.sortBy : 'boughtAt',
@@ -75,16 +79,19 @@ export class TradesService {
          dbQuery = dbQuery.andWhere({ currency });
       }
       if (query.from || query.to) {
-         const from = new Date('2022-06-01');
-         const to = new Date('2022-07-01');
+         const from = query.from
+            ? new Date(query.from)
+            : new Date('2009-03-01');
+         const to = query.to ? new Date(query.to) : new Date();
          dbQuery = dbQuery.andWhere('boughtAt BETWEEN :from AND :to', {
-            from: from ?? new Date('2000-01-01'),
-            to: to ?? new Date(),
+            from,
+            to,
          });
       }
       //PAGINATION:
       const { count, limit, offset, pages, page } =
          await this.getPaginationData(query, dbQuery);
+      console.log({ offset });
       dbQuery.limit(limit).offset(offset);
 
       //USER CURRENCIES ARR:
@@ -180,11 +187,13 @@ export class TradesService {
    ): Promise<GetPaginationDataResult> {
       const count = await dbQuery.getCount();
       const limit = query.limit ? +query.limit : 10;
-      const pages = Math.ceil(count / limit);
+      let pages = Math.ceil(count / limit);
+      if (pages < 1) pages = 1;
       let page = query.page ? +query.page : 1;
       if (query.page <= 1) page = 1;
       if (query.page >= pages) page = pages;
       const offset = (page - 1) * limit;
+      console.log({ page, limit, offset });
       return { count, limit, offset, pages, page };
    }
 

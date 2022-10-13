@@ -19,7 +19,7 @@ import {
    UpdatedTradeResponse,
 } from '../types';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { GetMyPaginated } from './dto/get-my.paginated';
+import { GetMyPaginatedQuery } from './dto/get-my-paginated.query';
 import { TradesService } from './trades.service';
 
 @Controller('trades')
@@ -37,7 +37,7 @@ export class TradesController {
    @Get('/my')
    async getMyPaginated(
       @GetCurrentUser('sub') id: string,
-      @Query() query: GetMyPaginated,
+      @Query() query: GetMyPaginatedQuery,
    ): Promise<GetMyPaginatedResponse>   {
       return await this.tradesService.getMyPaginated(id, query);
    }

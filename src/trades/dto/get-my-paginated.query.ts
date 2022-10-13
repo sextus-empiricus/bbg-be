@@ -1,7 +1,11 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { QueryOrder, QuerySortBy } from '../../types/trades';
+import {
+   GetMyPaginatedQueryInterface,
+   QueryOrder,
+   QuerySortBy,
+} from '../../types';
 
-export class GetMyPaginated {
+export class GetMyPaginatedQuery implements GetMyPaginatedQueryInterface{
    @IsOptional()
    @IsString()
    historical: string;
@@ -20,7 +24,7 @@ export class GetMyPaginated {
 
    @IsOptional()
    @IsString()
-   page: string;
+   page: number;
 
    @IsOptional()
    @IsString()
