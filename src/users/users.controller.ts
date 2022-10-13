@@ -1,14 +1,19 @@
-import { Controller, Delete } from '@nestjs/common';
+import { Controller, Delete, Get } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
-import { DeactivateUserByIdResponse } from '../types/users';
+import { DeactivateUserByIdResponse, GetUserByResponse } from '../types/users';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
    constructor(private readonly usersService: UsersService) {}
 
-   @Delete('/me')
-   deactivateById(
+   @Get('/')
+   getMe(@GetCurrentUser('sub') id: string): Promise<GetUserByResponse> {
+      return this.usersService.getById(id);
+   }
+
+   @Delete('/')
+   deactivateMe(
       @GetCurrentUser('sub') id: string,
    ): Promise<DeactivateUserByIdResponse> {
       return this.usersService.deactivateById(id);
@@ -24,10 +29,5 @@ export class UsersController {
    // @Get('/')
    // getAll(): Promise<GetAllUsersResponse> {
    //    return this.usersService.getAll();
-   // }
-
-   // @Get('/:id')
-   // getById(@Param('id') id: string): Promise<GetUserByResponse> {
-   //    return this.usersService.getById(id);
    // }
 }

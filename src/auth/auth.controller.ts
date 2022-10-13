@@ -8,9 +8,7 @@ import {
 } from '@nestjs/common';
 import { GetCurrentUser, PublicRoute } from '../decorators';
 import { RefreshTokenGuard } from '../guards';
-import { SuccessResponse } from '../types/api';
-import { JwtPayload } from '../types/auth';
-import { AuthResponse } from '../types/auth/auth.responses';
+import { AuthResponse, JwtPayload, SuccessResponse } from '../types';
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto';
 

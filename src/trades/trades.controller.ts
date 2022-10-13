@@ -6,7 +6,8 @@ import {
    Param,
    Patch,
    Post,
-   Query, UseGuards,
+   Query,
+   UseGuards,
 } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
 import { OwnerOnlyGuard } from '../guards';
@@ -14,10 +15,11 @@ import { AttachIconToTradePipe } from '../pipes/attach-icon-to-trade.pipe';
 import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
+   GetMyPaginatedResponse,
    UpdatedTradeResponse,
-} from '../types/trades';
+} from '../types';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
-import { GetAllMyActiveQueryDto } from './dto/get-all-my-active-query.dto';
+import { GetMyPaginatedQuery } from './dto/get-my-paginated.query';
 import { TradesService } from './trades.service';
 
 @Controller('trades')
@@ -25,7 +27,7 @@ export class TradesController {
    constructor(private readonly tradesService: TradesService) {}
 
    @Post('/')
-   create(
+   async create(
       @Body(AttachIconToTradePipe) createTradeDto: CreateTradeDto,
       @GetCurrentUser('sub') id: string,
    ): Promise<CreateTradeResponse> {
@@ -33,16 +35,16 @@ export class TradesController {
    }
 
    @Get('/my')
-   async getAllMy(
+   async getMyPaginated(
       @GetCurrentUser('sub') id: string,
-      @Query() query: GetAllMyActiveQueryDto,
-   ) {
-      return await this.tradesService.getAllMy(id, query);
+      @Query() query: GetMyPaginatedQuery,
+   ): Promise<GetMyPaginatedResponse>   {
+      return await this.tradesService.getMyPaginated(id, query);
    }
 
    @UseGuards(OwnerOnlyGuard)
    @Patch('/my/:id')
-   updateMy(
+   async updateMy(
       @Param('id') tradeId: string,
       @GetCurrentUser('sub') userId: string,
       @Body() updateTradeDto: UpdateTradeDto,
