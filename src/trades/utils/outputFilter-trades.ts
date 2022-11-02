@@ -1,4 +1,4 @@
-import { TradeMinified } from '../../types/trades';
+import { TradeMinified } from '../../types';
 import { Trade } from '../entities';
 
 /*ℹThis filter cleans dry db fetched data and removes all unusefull rows for a client (as `createdAt` etc.).
@@ -9,10 +9,10 @@ import { Trade } from '../entities';
 */
 export const outputFilterTrades = (
    trades: Trade[] | Trade | null,
-): TradeMinified[] => {
+): TradeMinified[] | null => {
    /*If `trades` is a null*/
    if (trades === null) {
-      return [null];
+      return null;
    }
    /*If `trades` is an array:*/
    if (Array.isArray(trades)) {

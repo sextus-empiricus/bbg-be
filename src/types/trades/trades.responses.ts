@@ -18,7 +18,7 @@ export interface GetAllTradesResponse {
 }
 
 export interface GetTradeByIdResponse {
-   trade: TradeMinified;
+   trade: TradeMinified | null;
 }
 
 export interface UpdatedTradeResponse {

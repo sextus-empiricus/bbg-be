@@ -14,11 +14,11 @@ export class OwnerOnlyGuard implements CanActivate {
 
    async canActivate(context: ExecutionContext): Promise<boolean> {
       const request = context.switchToHttp().getRequest();
-      await this.checkOwnerShip(request.params.id, request.user.sub);
+      await this.checkOwnership(request.params.id, request.user.sub);
       return true;
    }
 
-   async checkOwnerShip(tradeId: string, userId: string): Promise<void> {
+   async checkOwnership(tradeId: string, userId: string): Promise<void> {
       const trade = await this.dataSource
          .createQueryBuilder()
          .select('trade')
@@ -26,7 +26,7 @@ export class OwnerOnlyGuard implements CanActivate {
          .leftJoinAndSelect('trade.user', 'user')
          .where('trade.id = :id', { id: tradeId })
          .getOne();
-      if (!trade.user || trade.user.id !== userId)
+      if (!trade?.user || trade?.user?.id !== userId)
          throw new ForbiddenException(
             'Can not impact on trade of another user.',
          );

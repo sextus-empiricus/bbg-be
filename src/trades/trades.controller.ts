@@ -16,6 +16,7 @@ import {
    CreateTradeResponse,
    DeleteTradeByIdResponse,
    GetMyPaginatedResponse,
+   GetTradeByIdResponse,
    UpdatedTradeResponse,
 } from '../types';
 import { CreateTradeDto, UpdateTradeDto } from './dto';
@@ -38,8 +39,17 @@ export class TradesController {
    async getMyPaginated(
       @GetCurrentUser('sub') id: string,
       @Query() query: GetMyPaginatedQuery,
-   ): Promise<GetMyPaginatedResponse>   {
+   ): Promise<GetMyPaginatedResponse> {
       return await this.tradesService.getMyPaginated(id, query);
+   }
+
+   @UseGuards(OwnerOnlyGuard)
+   @Get('/my/:id')
+   async getMyById(
+      @Param('id') tradeId: string,
+      @GetCurrentUser('sub') userId: string,
+   ): Promise<GetTradeByIdResponse> {
+      return this.tradesService.getById(tradeId);
    }
 
    @UseGuards(OwnerOnlyGuard)

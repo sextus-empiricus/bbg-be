@@ -7,7 +7,6 @@ import {
    GetMyPaginatedResponse,
    GetPaginationDataResult,
    GetTradeByIdResponse,
-   TradeMinified,
    UpdatedTradeResponse,
    UserCurrenciesEntity,
 } from '../types';
@@ -98,6 +97,7 @@ export class TradesService {
       const historical = query.historical
          ? stringToBoolean(query.historical)
          : false;
+      console.log(historical);
       const userCurrencies = await this.getArrayOfUserCurrencies(
          userId,
          historical,
@@ -120,7 +120,7 @@ export class TradesService {
          .leftJoinAndSelect('trade.tradeHistory', 'tradeHistory')
          .leftJoinAndSelect('trade.iconUrl', 'iconUrl')
          .where({
-            inExchange: historical,
+            inExchange: !historical,
             user: { id: userId },
          })
          .getMany();
@@ -149,7 +149,7 @@ export class TradesService {
          .where('trade.id = :id', { id })
          .getOne();
       return {
-         trade: outputFilterTrades(trade)[0] as TradeMinified,
+         trade: outputFilterTrades(trade)[0],
       };
    }
 
@@ -216,6 +216,6 @@ export class TradesService {
             });
          }
       });
-      return filteredData;
+      return filteredData.sort((a, b) => a.currency.localeCompare(b.currency));
    }
 }
