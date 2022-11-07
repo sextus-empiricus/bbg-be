@@ -1,4 +1,4 @@
-import { IsEnum, IsNumber, IsOptional } from 'class-validator';
+import { IsEnum, IsOptional } from 'class-validator';
 import {
    GetMyPaginatedQueryInterface,
    QueryOrder,
@@ -12,7 +12,7 @@ export class GetMyPaginatedQuery implements GetMyPaginatedQueryInterface {
    @IsOptional()
    @IsEnum(QuerySortBy, {
       message:
-         'Incorrect query param. Allowed values: "amount", "boughtAt", "boughtFor", "currency", "price".',
+         'Incorrect query param. Allowed values: "amount", "boughtAt", "boughtFor", "currency", "sellPrice", "buyPrice", "profitCash", "profitPerc", "soldAt".',
    })
    sortBy: QuerySortBy;
 

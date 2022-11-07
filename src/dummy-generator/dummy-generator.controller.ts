@@ -1,6 +1,6 @@
 import { Controller, Post } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
-import { ResponseStatus, SuccessResponse } from '../types/api';
+import { ResponseStatus, SuccessResponse } from '../types';
 import { DummyGeneratorService } from './dummy-generator.service';
 
 @Controller('dummy-generator')

@@ -1,6 +1,6 @@
 import { Controller, Delete, Get } from '@nestjs/common';
 import { GetCurrentUser } from '../decorators';
-import { DeactivateUserByIdResponse, GetUserByResponse } from '../types/users';
+import { DeactivateUserByIdResponse, GetUserByResponse } from '../types';
 import { UsersService } from './users.service';
 
 @Controller('users')

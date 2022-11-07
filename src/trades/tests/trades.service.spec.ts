@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DataSource } from 'typeorm';
-import { ResponseStatus } from '../../types/api';
+import { ResponseStatus } from '../../types';
 import { User } from '../../users/entities';
 import { UsersService } from '../../users/users.service';
 import { Trade } from '../entities';

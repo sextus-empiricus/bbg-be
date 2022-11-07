@@ -33,10 +33,11 @@ export class DummyGeneratorService {
       for (let i = 0; i < 10; i++) {
          const boughtAt = this.getRandomDateSince(new Date('2021-01-01'));
          const currencyId = this.getRandomCurrienciyId();
-         const response = await this.externalApisService.getCurrencyHistoricalData(
-            currencyId,
-            boughtAt,
-         );
+         const response =
+            await this.externalApisService.getCurrencyHistoricalData(
+               currencyId,
+               boughtAt,
+            );
          const newTradeDto = await this.getNewTradeDto(response, boughtAt);
          const { createdTradeId } = await this.tradesService.create(
             newTradeDto,

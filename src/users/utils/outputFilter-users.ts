@@ -1,4 +1,4 @@
-import { UserMinified } from '../../types/users';
+import { UserMinified } from '../../types';
 import { User } from '../entities';
 
 export const outputFilterUsers = (

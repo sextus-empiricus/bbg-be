@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 import { TradesService } from '../../trades/trades.service';
-import { ResponseStatus } from '../../types/api';
+import { ResponseStatus } from '../../types';
 import { TradeHistory } from '../entities';
 import { TradeHistoryService } from '../trade-history.service';
 
