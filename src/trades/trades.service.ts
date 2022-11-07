@@ -7,6 +7,7 @@ import {
    GetMyPaginatedResponse,
    GetPaginationDataResult,
    GetTradeByIdResponse,
+   QuerySortBy,
    UpdatedTradeResponse,
    UserCurrenciesEntity,
 } from '../types';
@@ -63,9 +64,12 @@ export class TradesService {
          .orderBy('boughtAt', 'DESC');
 
       //SORT-ORDER:
-      // plain 'price' value belongs to two tables; TODO - when working on historical table add historical case;
-      if (!query.historical && query.sortBy === 'price')
-         query.sortBy = 'trade.price' as any;
+      if (query.sortBy === 'buyPrice') {
+         query.sortBy = 'trade.price' as QuerySortBy;
+      }
+      if (query.sortBy === 'sellPrice') {
+         query.sortBy = 'tradeHistory.price' as QuerySortBy;
+      }
       if (query.sortBy || query.order) {
          dbQuery = dbQuery.orderBy(
             query.sortBy ? query.sortBy : 'boughtAt',

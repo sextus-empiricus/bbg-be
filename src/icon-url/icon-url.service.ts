@@ -2,8 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { DataSource, InsertResult } from 'typeorm';
 import { ExternalApisService } from '../external-apis/external-apis.service';
 import { CreateTradeDto } from '../trades/dto';
-import { CreateIconUrlDto } from '../types/icon-url';
-import { IconUrlInterface } from '../types/icon-url';
+import { CreateIconUrlDto, IconUrlInterface } from '../types';
 import { IconUrl } from './entities';
 
 @Injectable()

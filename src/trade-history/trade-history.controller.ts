@@ -1,6 +1,6 @@
 import { Body, Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { OwnerOnlyGuard } from '../guards';
-import { CreateTradeHistoryResponse } from '../types/trade-history';
+import { CreateTradeHistoryResponse } from '../types';
 import { CreateTradeHistoryDto } from './dto';
 import { TradeHistoryService } from './trade-history.service';
 

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getDataSourceToken } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
-import { ResponseStatus } from '../../types/api';
+import { ResponseStatus } from '../../types';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 

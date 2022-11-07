@@ -4,7 +4,7 @@ import { IconUrl } from '../../icon-url/entities';
 import { IconUrlService } from '../../icon-url/icon-url.service';
 import { TradeHistoryService } from '../../trade-history/trade-history.service';
 import { TradesService } from '../../trades/trades.service';
-import { ResponseStatus } from '../../types/api';
+import { ResponseStatus } from '../../types';
 import { DummyGeneratorController } from '../dummy-generator.controller';
 import { DummyGeneratorService } from '../dummy-generator.service';
 

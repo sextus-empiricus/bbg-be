@@ -3,5 +3,5 @@ export interface GetPaginationDataResult {
    limit: number;
    offset: number;
    pages: number;
-   page: number
+   page: number;
 }

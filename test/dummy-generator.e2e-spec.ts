@@ -7,7 +7,7 @@ import { DummyGeneratorService } from '../src/dummy-generator/dummy-generator.se
 import { IconUrlService } from '../src/icon-url/icon-url.service';
 import { TradeHistoryService } from '../src/trade-history/trade-history.service';
 import { TradesService } from '../src/trades/trades.service';
-import { ResponseStatus } from '../src/types/api';
+import { ResponseStatus } from '../src/types';
 import { UsersService } from '../src/users/users.service';
 
 describe('DummyGeneratorService (e2e)', () => {

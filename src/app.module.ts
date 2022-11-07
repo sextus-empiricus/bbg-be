@@ -5,13 +5,13 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { CronModule } from './cron/cron.module';
+import { DummyGeneratorModule } from './dummy-generator/dummy-generator.module';
+import { ExternalApisModule } from './external-apis/external-apis.module';
 import { AccessTokenGuard } from './guards';
 import { IconUrlModule } from './icon-url/icon-url.module';
 import { TradeHistoryModule } from './trade-history/trade-history.module';
 import { TradesModule } from './trades/trades.module';
 import { UsersModule } from './users/users.module';
-import { DummyGeneratorModule } from './dummy-generator/dummy-generator.module';
-import { ExternalApisModule } from './external-apis/external-apis.module';
 
 const { host, port, username, password, database } = appConfig.typeorm;
 

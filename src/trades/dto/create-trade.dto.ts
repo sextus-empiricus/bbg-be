@@ -1,7 +1,6 @@
 import { IsNumber, IsPositive, IsString } from 'class-validator';
 import { TradeHistory } from '../../trade-history/entities';
-import { IconUrlInterface } from '../../types/icon-url';
-import { CreateTradeDtoInterface } from '../../types/trades';
+import { CreateTradeDtoInterface, IconUrlInterface } from '../../types';
 
 export class CreateTradeDto implements CreateTradeDtoInterface {
    @IsString()

@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { appConfig } from '../config/app-config';
 import { AuthModule } from '../src/auth/auth.module';
 import { AccessTokenGuard, RefreshTokenGuard } from '../src/guards';
-import { ResponseStatus } from '../src/types/api';
+import { ResponseStatus } from '../src/types';
 import { UsersModule } from '../src/users/users.module';
 import { UsersService } from '../src/users/users.service';
 

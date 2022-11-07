@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ResponseStatus } from '../../types/api';
+import { ResponseStatus } from '../../types';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 

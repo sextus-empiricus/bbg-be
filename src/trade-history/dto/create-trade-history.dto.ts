@@ -1,6 +1,6 @@
 import { IsNumber, IsObject, IsOptional, IsString } from 'class-validator';
 import { Trade } from '../../trades/entities';
-import { CreateTradeHistoryDtoInterface } from '../../types/trade-history';
+import { CreateTradeHistoryDtoInterface } from '../../types';
 
 export class CreateTradeHistoryDto implements CreateTradeHistoryDtoInterface {
    @IsString()
