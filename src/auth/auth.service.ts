@@ -5,7 +5,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
-import { appConfig } from '../../config/app-config';
+import { appConfig } from '../config/app-config';
 import {
    AuthResponse,
    ResponseStatus,

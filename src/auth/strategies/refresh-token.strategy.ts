@@ -2,8 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { appConfig } from '../../../config/app-config';
-import { JwtPayload } from '../../types/auth';
+import { appConfig } from '../../config/app-config';
+import { JwtPayload } from '../../types';
 
 const { secretOrKey } = appConfig.jwt.refresh;
 

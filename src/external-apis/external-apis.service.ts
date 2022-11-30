@@ -5,7 +5,7 @@ import {
    ServiceUnavailableException,
 } from '@nestjs/common';
 import { lastValueFrom, map } from 'rxjs';
-import { appConfig } from '../../config/app-config';
+import { appConfig } from '../config/app-config';
 
 const { coinsUrl } = appConfig.externalApis.coinGecko;
 const { authHeader, getIconUrl } = appConfig.externalApis.coinMarketCap;

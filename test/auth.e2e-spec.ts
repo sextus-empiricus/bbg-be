@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { hash } from 'bcrypt';
 import * as request from 'supertest';
-import { appConfig } from '../config/app-config';
+import { appConfig } from '../src/config/app-config';
 import { AuthModule } from '../src/auth/auth.module';
 import { AccessTokenGuard, RefreshTokenGuard } from '../src/guards';
 import { ResponseStatus } from '../src/types';

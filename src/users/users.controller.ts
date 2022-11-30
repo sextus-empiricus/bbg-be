@@ -18,16 +18,4 @@ export class UsersController {
    ): Promise<DeactivateUserByIdResponse> {
       return this.usersService.deactivateById(id);
    }
-
-   // @Post('/')
-   // async create(
-   //    @Body(ValidateNewUserPipe) createUserDto: CreateUserDto,
-   // ): Promise<CreateUserResponse> {
-   //    return await this.usersService.create(createUserDto);
-   // }
-
-   // @Get('/')
-   // getAll(): Promise<GetAllUsersResponse> {
-   //    return this.usersService.getAll();
-   // }
 }
