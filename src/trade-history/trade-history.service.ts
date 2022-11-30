@@ -1,9 +1,12 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { TradesService } from '../trades/trades.service';
-import { ResponseStatus } from '../types/api';
-import { CreateTradeHistoryResponse } from '../types/trade-history';
-import { CreateTradeHistoryDto } from './dto';
+import {
+   CreateTradeHistoryResponse,
+   ResponseStatus,
+   UpdateTradeHistoryResponse,
+} from '../types';
+import { CreateTradeHistoryDto, UpdateTradeHistoryDto } from './dto';
 import { TradeHistory } from './entities';
 
 @Injectable()
@@ -37,6 +40,27 @@ export class TradeHistoryService {
          status: ResponseStatus.success,
          createdTradeHistoryId: tradeHistoryId,
          relatedTradeId: tradeId,
+      };
+   }
+
+   async update(
+      tradeId: string,
+      dto: UpdateTradeHistoryDto,
+   ): Promise<UpdateTradeHistoryResponse> {
+      const {
+         trade: {
+            tradeHistory: { id: tradeHistoryId },
+         },
+      } = await this.tradesService.getById(tradeId);
+      await this.dataSource
+         .createQueryBuilder()
+         .update(TradeHistory)
+         .set(dto)
+         .where({ id: tradeHistoryId })
+         .execute();
+      return {
+         status: ResponseStatus.success,
+         updatedTradeHistoryId: tradeHistoryId,
       };
    }
 
