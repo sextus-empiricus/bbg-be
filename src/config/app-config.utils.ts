@@ -1,6 +1,6 @@
 export enum EnvKey {
    NODE_ENV = 'NODE_ENV',
-   APP_PORT = 'APP_PORT',
+   PORT = 'PORT',
    CORS_CLIENT_URL = 'CORS_CLIENT_URL',
 
    MYSQLDATABASE = 'MYSQLDATABASE',

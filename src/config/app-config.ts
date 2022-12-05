@@ -6,7 +6,7 @@ dotenv.config();
 export const appConfig = {
    app: {
       development: getEnv(EnvKey.NODE_ENV) !== 'production',
-      port: getEnv(EnvKey.APP_PORT),
+      port: getEnv(EnvKey.PORT),
       cors: {
          clientUrl: getEnv(EnvKey.CORS_CLIENT_URL),
       },
