@@ -3,8 +3,8 @@ export const appConfig = {
       development: true,
       port: 0,
       cors: {
-         clientUrl: ''
-      }
+         clientUrl: '',
+      },
    },
    typeorm: {
       host: '',

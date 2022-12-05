@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { appConfig } from './config/app-config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { appConfig } from './config/app-config';
 import { CronModule } from './cron/cron.module';
 import { DummyGeneratorModule } from './dummy-generator/dummy-generator.module';
 import { ExternalApisModule } from './external-apis/external-apis.module';
@@ -13,22 +13,9 @@ import { TradeHistoryModule } from './trade-history/trade-history.module';
 import { TradesModule } from './trades/trades.module';
 import { UsersModule } from './users/users.module';
 
-const { host, port, username, password, database } = appConfig.typeorm;
-
 @Module({
    imports: [
-      TypeOrmModule.forRoot({
-         type: 'mysql',
-         host,
-         port,
-         username,
-         password,
-         database,
-         entities: ['./dist/**/*.entity{.js,.ts}'],
-         bigNumberStrings: false,
-         logging: false,
-         synchronize: true,
-      }),
+      TypeOrmModule.forRoot(appConfig.typeorm as TypeOrmModuleOptions),
       AuthModule,
       CronModule,
       IconUrlModule,
