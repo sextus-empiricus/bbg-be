@@ -35,4 +35,5 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # MY:
-/config/app-config.ts
+/dev
+/.env
